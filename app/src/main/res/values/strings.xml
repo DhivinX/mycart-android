@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Mój koszyk</string>
+    <string name="btn_add_receipt">Dodaj paragon</string>
 </resources>
