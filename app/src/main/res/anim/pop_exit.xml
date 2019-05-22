@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 22.05.19 09:58
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Last modified 22.05.19 09:58
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<set>
+    <translate xmlns:android="http://schemas.android.com/apk/res/android"
+        android:fromYDelta="0"
+        android:toYDelta="100%"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:duration="@android:integer/config_mediumAnimTime"/>
+</set>

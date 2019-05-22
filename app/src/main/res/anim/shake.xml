@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 22.05.19 08:52
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Last modified 22.05.19 08:52
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="50"
+    android:fromDegrees="-5"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:repeatCount="5"
+    android:repeatMode="reverse"
+    android:toDegrees="5" />
