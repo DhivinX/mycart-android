@@ -23,7 +23,7 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
 
-        public ViewHolder(View v) {
+        private ViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.name);
         }
