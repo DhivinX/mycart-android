@@ -9,6 +9,7 @@
     tools:context="pl.szaradowski.mycart.activities.MainActivity">
 
     <ImageView
+        android:id="@+id/ivMainBackground"
         android:scaleType="centerCrop"
         android:src="@drawable/main_background"
         android:layout_width="match_parent"
@@ -82,20 +83,15 @@
      </android.support.design.widget.AppBarLayout>
 
      <LinearLayout
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:id="@+id/body_fragment_container"
          android:background="@drawable/panel_background"
          android:paddingTop="40dp"
          android:paddingLeft="10dp"
          android:paddingRight="10dp"
          android:paddingBottom="10dp"
-         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:orientation="vertical"
          android:layout_width="match_parent"
-         android:layout_height="match_parent">
-
-         <android.support.v7.widget.RecyclerView
-             android:id="@+id/list"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:padding="10dp" />
-     </LinearLayout>
+         android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>
