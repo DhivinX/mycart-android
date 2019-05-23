@@ -1,84 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    android:fitsSystemWindows="true"
+    tools:context="pl.szaradowski.mycart.activities.MainActivity">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/ivMainBackground"
+        android:scaleType="centerCrop"
+        android:src="@drawable/main_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <ImageView
-            android:id="@+id/ivMainBackground"
-            android:src="@drawable/main_background"
-            android:scaleType="centerCrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="120dp"
+        app:textFont="Font-Light"/>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+     <android.support.design.widget.AppBarLayout
+         android:id="@+id/appBar"
+         app:elevation="0dp"
+         android:layout_width="match_parent"
+         android:layout_height="200dp">
 
-        <pl.szaradowski.mycart.components.IconButton
-            android:id="@+id/btnReceipts"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icon_list"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnCharts"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+         <android.support.design.widget.CollapsingToolbarLayout
+             android:id="@+id/collapsingToolbar"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+             app:contentScrim="?attr/colorPrimary">
 
-        <pl.szaradowski.mycart.components.IconButton
-            android:id="@+id/btnSettings"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icon_settings"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+             <android.support.v7.widget.Toolbar
+                 android:id="@+id/toolbar"
+                 android:layout_width="match_parent"
+                 android:layout_height="40dp"
+                 app:layout_collapseMode="pin"
+                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        <pl.szaradowski.mycart.components.IconButton
-            android:id="@+id/btnCharts"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="16dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/icon_charts"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnSettings"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+                 <LinearLayout
+                     android:layout_marginTop="8dp"
+                     android:orientation="horizontal"
+                     android:gravity="center_vertical|end"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/body_fragment_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                     <pl.szaradowski.mycart.components.IconButton
+                         android:id="@+id/btnReceipts"
+                         android:layout_width="36dp"
+                         android:layout_height="36dp"
+                         android:layout_marginEnd="8dp"
+                         android:scaleType="fitCenter"
+                         android:src="@drawable/icon_list" />
 
-    </FrameLayout>
+                     <pl.szaradowski.mycart.components.IconButton
+                         android:id="@+id/btnCharts"
+                         android:layout_width="36dp"
+                         android:layout_height="36dp"
+                         android:layout_marginEnd="8dp"
+                         android:scaleType="fitCenter"
+                         android:src="@drawable/icon_charts" />
 
-</android.support.constraint.ConstraintLayout>
+                     <pl.szaradowski.mycart.components.IconButton
+                         android:id="@+id/btnSettings"
+                         android:layout_width="36dp"
+                         android:layout_height="36dp"
+                         android:layout_marginEnd="12dp"
+                         android:scaleType="fitCenter"
+                         android:src="@drawable/icon_settings" />
+                 </LinearLayout>
+             </android.support.v7.widget.Toolbar>
+         </android.support.design.widget.CollapsingToolbarLayout>
+     </android.support.design.widget.AppBarLayout>
+
+     <LinearLayout
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:id="@+id/body_fragment_container"
+         android:background="@drawable/panel_background"
+         android:paddingTop="40dp"
+         android:paddingLeft="10dp"
+         android:paddingRight="10dp"
+         android:paddingBottom="10dp"
+         android:orientation="vertical"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent" />
+
+</android.support.design.widget.CoordinatorLayout>

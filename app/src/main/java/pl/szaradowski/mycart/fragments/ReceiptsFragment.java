@@ -1,5 +1,5 @@
 /*
- * Created by Dominik Szaradowski on 22.05.19 11:21
+ * Created by Dominik Szaradowski on 23.05.19 10:36
  * Copyright (c) 2019 . All rights reserved.
  * Website: https://www.szaradowski.pl
  */
@@ -29,7 +29,7 @@ public class ReceiptsFragment extends Fragment {
     ReceiptsAdapter adapter;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_receipts, container, false);
     }
 

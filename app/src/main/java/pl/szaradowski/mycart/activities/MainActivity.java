@@ -6,28 +6,31 @@
 
 package pl.szaradowski.mycart.activities;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import pl.szaradowski.mycart.R;
+import pl.szaradowski.mycart.adapters.ReceiptsAdapter;
+import pl.szaradowski.mycart.adapters.ReceiptsItem;
 import pl.szaradowski.mycart.common.Screen;
 import pl.szaradowski.mycart.components.IconButton;
-import pl.szaradowski.mycart.components.RichButton;
 import pl.szaradowski.mycart.fragments.ChartsFragment;
 import pl.szaradowski.mycart.fragments.ReceiptsFragment;
 import pl.szaradowski.mycart.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     IconButton btnSettings, btnReceipts, btnCharts;
-    ImageView ivMainBackground;
-
     Screen scrReceipts, scrCharts, scrSettings;
+
+    ImageView ivMainBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
