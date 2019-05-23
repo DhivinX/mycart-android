@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Created by Dominik Szaradowski on 23.05.19 10:43
-  ~ Copyright (c) 2019 . All rights reserved.
-  ~ Website: https://www.szaradowski.pl
-  -->
+    <!--
+      ~ Created by Dominik Szaradowski on 23.05.19 10:43
+      ~ Copyright (c) 2019 . All rights reserved.
+      ~ Website: https://www.szaradowski.pl
+      -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@drawable/panel_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <pl.szaradowski.mycart.components.RichTextView
+        android:text="@string/settings"
+        android:textSize="34sp"
+        android:layout_marginTop="55dp"
+        android:layout_marginStart="20dp"
+        app:textFont="Font-Regular"
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <pl.szaradowski.mycart.components.RichTextView
+        android:text="@string/settings_sub"
+        android:textSize="18sp"
+        android:layout_marginTop="-3dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        app:textFont="Font-Light"
+        android:textColor="#A1A0A8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

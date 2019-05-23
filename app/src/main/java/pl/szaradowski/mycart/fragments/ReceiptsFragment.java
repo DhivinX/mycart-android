@@ -6,12 +6,15 @@
 
 package pl.szaradowski.mycart.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +53,29 @@ public class ReceiptsFragment extends Fragment {
 
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ReceiptsAdapter(items);
+        adapter = new ReceiptsAdapter(items, getContext());
         list.setAdapter(adapter);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        scrollToPosition(0);
+    }
+
+    public void scrollToPosition(final int position) {
+        if (list != null) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    list.scrollToPosition(position);
+
+                    if (position == 0) {
+                        LinearLayoutManager layoutManager = (LinearLayoutManager) list.getLayoutManager();
+                        layoutManager.scrollToPositionWithOffset(0, 0);
+                    }
+                }
+            });
+        }
     }
 }

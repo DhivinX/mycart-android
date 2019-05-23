@@ -5,57 +5,57 @@
   ~ Website: https://www.szaradowski.pl
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="60dp">
+
+    <LinearLayout
+        android:layout_marginStart="20dp"
+        android:background="#E3E3EC"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"/>
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="40dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        android:id="@+id/dot"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="14dp"
+        android:background="@drawable/circle_shape_cyan"
+        android:layout_width="13dp"
+        android:layout_height="13dp"/>
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="parent">
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/name"
+        android:textSize="18sp"
+        android:text="Receipt name"
+        android:textColor="#000"
+        app:textFont="Font-Regular"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Receipt name"
-            android:textAlignment="textStart"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/subname"
+        android:textSize="16sp"
+        android:text="Dodatkowy opis paragonu."
+        android:textColor="#A1A0A8"
+        app:textFont="Font-Light"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="22.05.2019"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name" />
-
-    </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/date"
+        android:textSize="18sp"
+        android:text="13:45"
+        android:textColor="#A1A0A8"
+        app:textFont="Font-Light"
+        android:layout_gravity="end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</FrameLayout>

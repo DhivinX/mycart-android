@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Mój koszyk</string>
+    <string name="app_name_sub">Zorganizowane zakupy!</string>
     <string name="btn_add_receipt">Nowy paragon</string>
+    <string name="receipts">Paragony</string>
+    <string name="receipt_sub">Wszystkie zapisane paragony.</string>
+    <string name="settings">Ustawienia</string>
+    <string name="settings_sub">Ustawienia konta i aplikacji.</string>
+    <string name="charts">Historia</string>
+    <string name="charts_sub">Dane historyczne i wykresy.</string>
 </resources>

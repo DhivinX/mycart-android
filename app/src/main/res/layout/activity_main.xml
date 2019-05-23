@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,20 +16,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <pl.szaradowski.mycart.components.RichTextView
-        android:id="@+id/textView"
+    <FrameLayout
+        android:id="@+id/flLogo"
+        android:layout_marginTop="85dp"
+        android:layout_marginStart="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="120dp"
-        app:textFont="Font-Light"/>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <pl.szaradowski.mycart.components.RichTextView
+            android:id="@+id/tvLogoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:layout_marginStart="50dp"
+            app:textFont="Font-Bold"/>
+
+        <pl.szaradowski.mycart.components.RichTextView
+            android:id="@+id/tvLogoTextSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name_sub"
+            android:textAllCaps="true"
+            android:textColor="#AAFFFFFF"
+            android:textSize="16sp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="29dp"
+            app:textFont="Font-Light"/>
+    </FrameLayout>
 
      <android.support.design.widget.AppBarLayout
-         android:id="@+id/appBar"
+         android:id="@+id/appbar"
          app:elevation="0dp"
          android:layout_width="match_parent"
          android:layout_height="200dp">
@@ -85,11 +112,6 @@
      <LinearLayout
          app:layout_behavior="@string/appbar_scrolling_view_behavior"
          android:id="@+id/body_fragment_container"
-         android:background="@drawable/panel_background"
-         android:paddingTop="40dp"
-         android:paddingLeft="10dp"
-         android:paddingRight="10dp"
-         android:paddingBottom="10dp"
          android:orientation="vertical"
          android:layout_width="match_parent"
          android:layout_height="match_parent" />
