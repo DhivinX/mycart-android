@@ -12,6 +12,7 @@
     android:layout_height="match_parent">
 
     <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/add"
         android:layout_gravity="end"
         android:padding="12dp"
         android:layout_marginTop="30dp"

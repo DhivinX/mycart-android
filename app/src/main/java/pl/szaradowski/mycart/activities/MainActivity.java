@@ -11,21 +11,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import pl.szaradowski.mycart.R;
-import pl.szaradowski.mycart.adapters.ReceiptsAdapter;
-import pl.szaradowski.mycart.adapters.ReceiptsItem;
 import pl.szaradowski.mycart.common.Screen;
 import pl.szaradowski.mycart.components.IconButton;
 import pl.szaradowski.mycart.components.RichTextView;
@@ -122,8 +114,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        Screen.clear();
+        appbar.setExpanded(true,true);
+        scrReceipts.Load();
+    }
+
+    @Override
     public void onBackPressed() {
         appbar.setExpanded(true,true);
         Screen.onBack(this);
     }
+
+
 }

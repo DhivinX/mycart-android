@@ -8,4 +8,7 @@
     <color name="colorAccentDark">#29598A</color>
     <color name="colorFillList">#fff</color>
     <color name="colorTextAccent">#fff</color>
+
+    <color name="colorTopBar">#EBEBEB</color>
+    <color name="colorTopBarTitle">#1D1D1D</color>
 </resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 24.05.19 10:28
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/top_bar_background"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/back"
+        android:src="@drawable/icon_back_dark"
+        android:layout_marginStart="20dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerInside"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content" />
+
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/title"
+        android:textColor="@color/colorTopBarTitle"
+        android:textSize="20sp"
+        app:textFont="Font-Light"
+        android:gravity="center_vertical"
+        android:layout_marginStart="60dp"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/menu"
+        android:src="@drawable/icon_menu_dark"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="end|center_vertical"
+        android:scaleType="centerInside"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content" />
+</FrameLayout>

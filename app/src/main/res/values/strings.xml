@@ -1,11 +1,44 @@
 <resources>
-    <string name="app_name">Mój koszyk</string>
-    <string name="app_name_sub">Zorganizowane zakupy!</string>
+    <string name="app_name">Ile Zapłacę</string>
+    <string name="app_name_sub">Przemyślane zakupy!</string>
     <string name="btn_add_receipt">Nowy paragon</string>
+
     <string name="receipts">Paragony</string>
     <string name="receipt_sub">Wszystkie zapisane paragony.</string>
+    <string name="receipt_def_name">Paragon nr</string>
+    <string name="receipt_subname">%1$d pozycji na kwotę %2$s %3$s</string>
+
     <string name="settings">Ustawienia</string>
     <string name="settings_sub">Ustawienia konta i aplikacji.</string>
+
     <string name="charts">Historia</string>
     <string name="charts_sub">Dane historyczne i wykresy.</string>
+
+    <string name="products_menu_item1">Zmień nazwę</string>
+    <string name="products_menu_item2">Usuń</string>
+
+
+    <string name="today">dziś</string>
+    <string name="yesterday">wczoraj</string>
+
+    <string name="day_sm_1">pon</string>
+    <string name="day_sm_2">wt</string>
+    <string name="day_sm_3">śr</string>
+    <string name="day_sm_4">czw</string>
+    <string name="day_sm_5">pt</string>
+    <string name="day_sm_6">sb</string>
+    <string name="day_sm_7">nd</string>
+
+    <string name="month_sm_1">sty</string>
+    <string name="month_sm_2">lut</string>
+    <string name="month_sm_3">mar</string>
+    <string name="month_sm_4">kwi</string>
+    <string name="month_sm_5">maj</string>
+    <string name="month_sm_6">cze</string>
+    <string name="month_sm_7">lip</string>
+    <string name="month_sm_8">sie</string>
+    <string name="month_sm_9">wrz</string>
+    <string name="month_sm_10">paź</string>
+    <string name="month_sm_11">lis</string>
+    <string name="month_sm_12">gru</string>
 </resources>

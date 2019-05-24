@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 24.05.19 11:08
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item  android:id="@+id/item1"
+        android:titleCondensed="changename"
+        android:title="@string/products_menu_item1"/>
+
+    <item  android:id="@+id/item2"
+        android:titleCondensed="delete"
+        android:title="@string/products_menu_item2"/>
+</menu>

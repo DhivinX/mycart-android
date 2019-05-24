@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Dominik Szaradowski on 22.05.19 13:27
+  ~ Created by Dominik Szaradowski on 24.05.19 14:17
   ~ Copyright (c) 2019 . All rights reserved.
   ~ Website: https://www.szaradowski.pl
   -->
@@ -30,7 +30,7 @@
     <pl.szaradowski.mycart.components.RichTextView
         android:id="@+id/name"
         android:textSize="18sp"
-        android:text="Receipt name"
+        android:text="Product name"
         android:textColor="#000"
         app:textFont="Font-Regular"
         android:layout_marginStart="50dp"
@@ -41,7 +41,7 @@
     <pl.szaradowski.mycart.components.RichTextView
         android:id="@+id/subname"
         android:textSize="16sp"
-        android:text="Subname"
+        android:text="Dodatkowy opis paragonu."
         android:textColor="#A1A0A8"
         app:textFont="Font-Light"
         android:layout_marginStart="50dp"

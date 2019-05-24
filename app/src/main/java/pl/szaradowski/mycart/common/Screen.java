@@ -7,6 +7,7 @@
 package pl.szaradowski.mycart.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -65,9 +66,20 @@ public class Screen {
                 if(bck != null){
                     bck.Load();
                 }else{
-                    ((MainActivity) ctx).moveTaskToBack(true);
+                    //((MainActivity) ctx).moveTaskToBack(true);
+
+                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                    homeIntent.addCategory( Intent.CATEGORY_HOME );
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    ((MainActivity) ctx).startActivity(homeIntent);
+                    ((MainActivity) ctx).finish();
                 }
             }
         }
+    }
+
+    public static void clear(){
+        actualScreen = null;
     }
 }

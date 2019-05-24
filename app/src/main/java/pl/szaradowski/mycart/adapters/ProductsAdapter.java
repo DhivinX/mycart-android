@@ -1,5 +1,5 @@
 /*
- * Created by Dominik Szaradowski on 22.05.19 13:12
+ * Created by Dominik Szaradowski on 24.05.19 14:17
  * Copyright (c) 2019 . All rights reserved.
  * Website: https://www.szaradowski.pl
  */
@@ -17,15 +17,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.common.Product;
 import pl.szaradowski.mycart.common.Receipt;
-import pl.szaradowski.mycart.common.Settings;
 import pl.szaradowski.mycart.components.RichTextView;
 
-public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
+public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public FrameLayout frame;
         public RichTextView name;
@@ -49,11 +47,11 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
         boolean onLongClick(int position);
     }
 
-    private ArrayList<Receipt> data;
+    private ArrayList<Product> data;
     private Context ctx;
     private FingerListener listener;
 
-    public ReceiptsAdapter(ArrayList<Receipt> data, Context ctx) {
+    public ProductsAdapter(ArrayList<Product> data, Context ctx) {
         this.data = data;
         this.ctx = ctx;
     }
@@ -61,24 +59,16 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_receipt, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
 
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int pos) {
-        Receipt item = data.get(pos);
-
-        int products_cnt = item.getProducts().size();
-        float price_all = 0;
-
-        for(Product p : item.getProducts()){
-            price_all += p.getPrice();
-        }
+        Product item = data.get(pos);
 
         holder.name.setText(item.getName());
-        holder.subname.setText(ctx.getString(R.string.receipt_subname, products_cnt, String.format(Settings.locale, "%.2f", price_all) , item.getCurrency()));
 
         if(pos % 3 == 0) holder.dot.setBackground(ContextCompat.getDrawable(ctx, R.drawable.circle_shape_pink));
         else if(pos % 2 == 0) holder.dot.setBackground(ContextCompat.getDrawable(ctx, R.drawable.circle_shape_cyan));

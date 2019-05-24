@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 24.05.19 10:13
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape
+            android:shape="rectangle">
+            <solid android:color="@android:color/darker_gray" />
+            <corners android:radius="0dp"/>
+        </shape>
+    </item>
+    <item android:right="0dp" android:left="0dp" android:bottom="1dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="@color/colorTopBar"/>
+            <corners android:radius="0dp"/>
+        </shape>
+    </item>
+</layer-list>
