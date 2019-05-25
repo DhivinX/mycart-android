@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 if(ratio < 0) ratio = 0;
 
                 int alpha = Math.round(ratio * 255);
-                int alpha2 = Math.round(ratio * 119);
+                int alpha2 = Math.round(ratio * 204);
 
                 ivLogo.setAlpha(ratio);
                 tvLogoText.setTextColor(Color.argb(alpha, 255, 255, 255));

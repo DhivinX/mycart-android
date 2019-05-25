@@ -2,20 +2,26 @@
     <string name="app_name">Ile Zapłacę</string>
     <string name="app_name_sub">Przemyślane zakupy!</string>
     <string name="btn_add_receipt">Nowy paragon</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="save">Zapisz</string>
+    <string name="accept">Akceptuj</string>
+    <string name="cancel">Anuluj</string>
 
     <string name="receipts">Paragony</string>
     <string name="receipt_sub">Wszystkie zapisane paragony.</string>
     <string name="receipt_def_name">Paragon nr</string>
     <string name="receipt_subname">%1$d pozycji na kwotę %2$s %3$s</string>
+    <string name="products_menu_item1">Zmień nazwę</string>
+    <string name="products_menu_item2">Usuń</string>
+    <string name="product_title">Dodaj produkt</string>
+    <string name="product_dialog_ocr_title">Wybierz nazwę produktu</string>
 
     <string name="settings">Ustawienia</string>
     <string name="settings_sub">Ustawienia konta i aplikacji.</string>
 
     <string name="charts">Historia</string>
     <string name="charts_sub">Dane historyczne i wykresy.</string>
-
-    <string name="products_menu_item1">Zmień nazwę</string>
-    <string name="products_menu_item2">Usuń</string>
 
 
     <string name="today">dziś</string>

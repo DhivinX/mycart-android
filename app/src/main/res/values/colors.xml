@@ -4,11 +4,11 @@
     <color name="colorPrimary">#00000000</color>
     <color name="colorPrimaryDark">#000</color>
 
-    <color name="colorAccent">#4B81B9</color>
-    <color name="colorAccentDark">#29598A</color>
+    <color name="colorAccent">#E61934</color>
+    <color name="colorAccentDark">#A50E22</color>
     <color name="colorFillList">#fff</color>
     <color name="colorTextAccent">#fff</color>
 
-    <color name="colorTopBar">#EBEBEB</color>
+    <color name="colorTopBar">#F2F6F7</color>
     <color name="colorTopBarTitle">#1D1D1D</color>
 </resources>

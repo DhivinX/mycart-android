@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Dominik Szaradowski on 24.05.19 10:28
+  ~ Created by Dominik Szaradowski on 24.05.19 18:38
   ~ Copyright (c) 2019 . All rights reserved.
   ~ Website: https://www.szaradowski.pl
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/top_bar_background"
+    android:background="@color/colorAlpha"
     android:layout_width="match_parent"
     android:layout_height="60dp">
 
     <pl.szaradowski.mycart.components.IconButton
         android:id="@+id/back"
-        android:src="@drawable/icon_back_dark"
-        android:background="@drawable/circle_button_bar"
+        android:src="@drawable/icon_back"
         android:layout_marginStart="20dp"
         android:layout_marginTop="1dp"
         android:layout_gravity="center_vertical"
@@ -24,7 +23,7 @@
 
     <pl.szaradowski.mycart.components.RichTextView
         android:id="@+id/title"
-        android:textColor="@color/colorTopBarTitle"
+        android:textColor="#fff"
         android:textSize="20sp"
         app:textFont="Font-Light"
         android:gravity="center_vertical"
@@ -35,8 +34,7 @@
 
     <pl.szaradowski.mycart.components.IconButton
         android:id="@+id/menu"
-        android:src="@drawable/icon_menu_dark"
-        android:background="@drawable/circle_button_bar"
+        android:src="@drawable/icon_menu"
         android:layout_marginEnd="20dp"
         android:layout_gravity="end|center_vertical"
         android:scaleType="centerInside"

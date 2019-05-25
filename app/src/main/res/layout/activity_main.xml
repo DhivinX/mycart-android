@@ -39,6 +39,10 @@
             android:textColor="#FFFFFF"
             android:textSize="28sp"
             android:layout_marginStart="55dp"
+            android:shadowColor="#000"
+            android:shadowRadius="2"
+            android:shadowDx="1"
+            android:shadowDy="1"
             app:textFont="Font-Bold"/>
 
         <pl.szaradowski.mycart.components.RichTextView
@@ -47,10 +51,14 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name_sub"
             android:textAllCaps="true"
-            android:textColor="#AAFFFFFF"
+            android:textColor="#CCFFFFFF"
             android:textSize="16sp"
             android:layout_marginStart="55dp"
             android:layout_marginTop="29dp"
+            android:shadowColor="#000"
+            android:shadowRadius="2"
+            android:shadowDx="1"
+            android:shadowDy="1"
             app:textFont="Font-Light"/>
     </FrameLayout>
 
@@ -86,7 +94,6 @@
                          android:layout_width="36dp"
                          android:layout_height="36dp"
                          android:layout_marginEnd="8dp"
-                         android:scaleType="fitCenter"
                          android:src="@drawable/icon_list" />
 
                      <pl.szaradowski.mycart.components.IconButton
@@ -94,7 +101,6 @@
                          android:layout_width="36dp"
                          android:layout_height="36dp"
                          android:layout_marginEnd="8dp"
-                         android:scaleType="fitCenter"
                          android:src="@drawable/icon_charts" />
 
                      <pl.szaradowski.mycart.components.IconButton

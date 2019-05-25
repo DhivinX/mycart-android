@@ -8,7 +8,7 @@
 
 <set xmlns:android="http://schemas.android.com/apk/res/android">
     <alpha
-        android:duration="300"
+        android:duration="200"
         android:fromAlpha="1"
         android:toAlpha="0"/>
 </set>

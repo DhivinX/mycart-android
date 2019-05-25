@@ -10,18 +10,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/activity_background"
     tools:context=".activities.ReceiptActivity">
-
-    <pl.szaradowski.mycart.components.IconButton
-        android:id="@+id/add"
-        android:layout_gravity="end|bottom"
-        android:padding="16dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/icon_addcart"
-        android:background="@drawable/circle_button_red"
-        android:layout_width="60dp"
-        android:layout_height="60dp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -34,6 +24,33 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp" />
+            android:paddingBottom="100dp" />
     </LinearLayout>
+
+    <pl.szaradowski.mycart.components.RichTextView
+        android:id="@+id/price"
+        android:text="0,00 zł"
+        app:textFont="Font-Regular"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:background="@drawable/circle_button_red"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="start|bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp" />
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/add"
+        android:layout_gravity="end|bottom"
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/icon_addcart"
+        android:background="@drawable/circle_button_red"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
 </FrameLayout>
