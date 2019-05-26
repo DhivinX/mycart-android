@@ -32,8 +32,8 @@
             <corners android:radius="30dp" />
             <solid android:color="#E61934" />
             <stroke
-                android:width="1dip"
-                android:color="#E61934" />
+                android:width="3dip"
+                android:color="#C5142A" />
         </shape>
     </item>
 </ripple>

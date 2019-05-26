@@ -11,11 +11,20 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import pl.szaradowski.mycart.R;
 
 public class RichButton extends AppCompatButton {
+    public interface OnClickListener{
+        void onClick();
+    }
+
     String font;
+    Context ctx;
+    RichButton.OnClickListener onClickListener = null;
 
     public RichButton(Context context) {
         super(context);
@@ -23,20 +32,51 @@ public class RichButton extends AppCompatButton {
 
     public RichButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        style(context, attrs);
+        init(context, attrs);
     }
 
     public RichButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        style(context, attrs);
+        init(context, attrs);
     }
 
-    private void style(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RichButton);
+    public void init(Context context, AttributeSet attrs){
+        ctx = context;
+
+        this.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animScale();
+
+                if(onClickListener != null){
+                    onClickListener.onClick();
+                }
+            }
+        });
+
+        style(attrs);
+    }
+
+    public void setOnClickListener(RichButton.OnClickListener listener){
+        onClickListener = listener;
+    }
+
+    private void style(AttributeSet attrs) {
+        TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.RichButton);
         font = a.getString(R.styleable.RichButton_textFont);
 
-        Typeface tf = Typeface.createFromAsset(context.getAssets(),"fonts/" + font + ".ttf");
+        Typeface tf = Typeface.createFromAsset(ctx.getAssets(),"fonts/" + font + ".ttf");
         setTypeface(tf);
         a.recycle();
+    }
+
+    public void animShake(){
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.shake);
+        this.startAnimation(a);
+    }
+
+    public void animScale(){
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.scale);
+        this.startAnimation(a);
     }
 }

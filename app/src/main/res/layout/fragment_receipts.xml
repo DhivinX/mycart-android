@@ -12,6 +12,17 @@
     android:layout_height="match_parent">
 
     <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/btnDate"
+        android:layout_gravity="end"
+        android:padding="12dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="85dp"
+        android:src="@drawable/icon_calendar"
+        android:background="@drawable/circle_button_dark"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <pl.szaradowski.mycart.components.IconButton
         android:id="@+id/add"
         android:layout_gravity="end"
         android:padding="12dp"
@@ -28,6 +39,7 @@
         android:layout_height="match_parent">
 
         <pl.szaradowski.mycart.components.RichTextView
+            android:id="@+id/title"
             android:text="@string/receipts"
             android:textSize="34sp"
             android:layout_marginTop="55dp"
@@ -42,7 +54,7 @@
             android:textSize="18sp"
             android:layout_marginTop="-3dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="22dp"
             app:textFont="Font-Light"
             android:textColor="#A1A0A8"
             android:layout_width="match_parent"

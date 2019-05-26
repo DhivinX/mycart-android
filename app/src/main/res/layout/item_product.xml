@@ -32,7 +32,7 @@
         android:id="@+id/img"
         android:layout_marginTop="5dp"
         android:layout_marginStart="40dp"
-        android:background="@drawable/circle_shape_cyan"
+        android:background="@drawable/circle_no_image"
         android:layout_width="50dp"
         android:layout_height="50dp"/>
 
@@ -40,8 +40,11 @@
         android:id="@+id/name"
         android:textSize="18sp"
         android:text="Product name"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="#000"
         app:textFont="Font-Regular"
+        android:layout_marginEnd="20dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="12dp"
         android:layout_width="wrap_content"
@@ -60,13 +63,13 @@
 
     <pl.szaradowski.mycart.components.RichTextView
         android:id="@+id/price"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:text="13,20 zł"
         android:textColor="#7FB546"
         app:textFont="Font-Regular"
         android:layout_gravity="end"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </FrameLayout>

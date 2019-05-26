@@ -22,8 +22,7 @@ import java.util.ArrayList;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.common.Product;
-import pl.szaradowski.mycart.common.Receipt;
-import pl.szaradowski.mycart.common.Settings;
+import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.RichTextView;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
@@ -74,7 +73,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Product item = data.get(pos);
 
         holder.name.setText(item.getName());
-        holder.price.setText(String.format(Settings.locale, "%.2f", item.getVal())+" "+item.getCurrency());
+        holder.price.setText(String.format(Utils.locale, "%.2f", item.getVal())+" "+ Utils.currency);
         holder.subname.setText(ctx.getString(R.string.item_product_subname, item.getCnt()+""));
 
         RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(ctx.getResources(), item.getImg(ctx));

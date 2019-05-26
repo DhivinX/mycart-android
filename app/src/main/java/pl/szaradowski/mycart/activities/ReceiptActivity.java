@@ -23,7 +23,7 @@ import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.adapters.ProductsAdapter;
 import pl.szaradowski.mycart.common.Product;
 import pl.szaradowski.mycart.common.Receipt;
-import pl.szaradowski.mycart.common.Settings;
+import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.IconButton;
 import pl.szaradowski.mycart.components.RichEditText;
 import pl.szaradowski.mycart.components.RichTextView;
@@ -32,7 +32,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
     RecyclerView list;
     ProductsAdapter adapter;
 
-    RichTextView title, price;
+    RichTextView title, price, receipt_name, subname;
     IconButton menu, back, add;
     Receipt receipt;
     int receipt_id = -1;
@@ -47,6 +47,8 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         back = findViewById(R.id.back);
         add = findViewById(R.id.add);
         price = findViewById(R.id.price);
+        receipt_name = findViewById(R.id.receipt_name);
+        subname = findViewById(R.id.subname);
 
         list = findViewById(R.id.list);
 
@@ -59,11 +61,13 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
             receipt.setTime(System.currentTimeMillis());
 
             receipt_id = receipt.getId();
+
+            Receipt.sort();
         }else{
             receipt = Receipt.getById(receipt_id);
         }
 
-        if(receipt != null) title.setText(receipt.getName());
+        title.setText(R.string.receipt_list);
 
         back.setOnClickListener(new IconButton.OnClickListener() {
             @Override
@@ -117,22 +121,25 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         refresh();
     }
 
-    public void refresh(){
-        adapter.notifyDataSetChanged();
+    public void refresh() {
+        if (receipt != null) {
+            adapter.notifyDataSetChanged();
 
-        float price_all = 0;
-        for(Product p : receipt.getProducts()){
-            price_all += p.getPrice();
+            int products_cnt = receipt.getProducts().size();
+            float price_all = receipt.getVal();
+
+            receipt_name.setText(receipt.getName());
+
+            subname.setText(getString(R.string.receipt_subname, products_cnt, String.format(Utils.locale, "%.2f", price_all), receipt.getCurrency()));
+            price.setText(String.format(Utils.locale, "%.2f", price_all) + " " + Utils.currency);
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.saveReceipts(ReceiptActivity.this);
+                }
+            });
         }
-
-        price.setText(String.format(Settings.locale, "%.2f", price_all) + " " + receipt.getCurrency());
-
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                Settings.saveReceipts(ReceiptActivity.this);
-            }
-        });
     }
 
     public void showMenu(){
@@ -173,12 +180,13 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     receipt.setName(etName.getText().toString());
-                    title.setText(receipt.getName());
+
+                    refresh();
 
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            Settings.saveReceipts(ReceiptActivity.this);
+                            Utils.saveReceipts(ReceiptActivity.this);
                         }
                     });
 
@@ -195,7 +203,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    Settings.saveReceipts(ReceiptActivity.this);
+                    Utils.saveReceipts(ReceiptActivity.this);
                 }
             });
 

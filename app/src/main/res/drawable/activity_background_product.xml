@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 26.05.19 13:51
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:right="-200dp"
+        android:left="-200dp"
+        android:top="35dp"
+        android:bottom="0dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="#fff"/>
+        </shape>
+    </item>
+</selector>

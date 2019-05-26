@@ -9,7 +9,7 @@
 <ripple
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:color="#363636"
+    android:color="#6D6D6D"
     tools:targetApi="lollipop">
 
     <item android:id="@android:id/mask">
@@ -17,10 +17,10 @@
             android:shape="rectangle">
 
             <corners android:radius="30dp" />
-            <solid android:color="#363636" />
+            <solid android:color="#6D6D6D" />
             <stroke
                 android:width="1dip"
-                android:color="#363636" />
+                android:color="#6D6D6D" />
         </shape>
     </item>
 
@@ -29,10 +29,10 @@
             android:shape="rectangle">
 
             <corners android:radius="30dp" />
-            <solid android:color="#181818" />
+            <solid android:color="#303030" />
             <stroke
-                android:width="1dip"
-                android:color="#181818" />
+                android:width="3dip"
+                android:color="#252525" />
         </shape>
     </item>
 </ripple>

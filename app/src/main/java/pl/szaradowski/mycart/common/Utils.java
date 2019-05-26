@@ -7,9 +7,7 @@
 package pl.szaradowski.mycart.common;
 
 import android.content.Context;
-import android.util.JsonReader;
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -19,7 +17,6 @@ import com.google.gson.JsonParser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +24,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
 
-public class Settings {
+public class Utils {
     public static String currency = "zł";
     public static Locale locale = Locale.GERMAN;
+    public static int[] types = {0, 1, 2, 3};
 
     public static void saveReceipts(Context ctx){
         JsonObject receipt = Receipt.allToJson();
@@ -51,6 +49,8 @@ public class Settings {
 
     public static void loadAll(Context ctx){
         try {
+            Receipt.getList().clear();
+
             File file_receipt = new File(ctx.getFilesDir(), "data_receipts.json");
             FileInputStream fin = new FileInputStream(file_receipt);
             String ret = convertStreamToString(fin);
@@ -83,8 +83,9 @@ public class Settings {
                     p.setName(pitem.get("name").getAsString());
                     p.setPrice(pitem.get("price").getAsFloat());
                     p.setCnt(pitem.get("cnt").getAsFloat());
-                    p.setImgPath(pitem.get("img").getAsString());
+                    if(pitem.get("img") != null) p.setImgPath(pitem.get("img").getAsString());
                     p.setTime(pitem.get("time").getAsLong());
+                    p.setType(pitem.get("type").getAsInt());
 
                     or.getProducts().add(p);
                 }
@@ -93,8 +94,10 @@ public class Settings {
             }
 
             fin.close();
+
+            Receipt.sort();
         } catch (Exception e) {
-            Log.w("Settings Saver", "Nothing to load.");
+            Log.e("Utils Saver", "Nothing to load: " + e);
         }
     }
 

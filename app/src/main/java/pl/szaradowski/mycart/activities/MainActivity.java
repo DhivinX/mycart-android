@@ -11,6 +11,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -27,7 +28,7 @@ import pl.szaradowski.mycart.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     CoordinatorLayout coordinator;
-    AppBarLayout appbar;
+    public AppBarLayout appbar;
     IconButton btnSettings, btnReceipts, btnCharts;
     Screen scrReceipts, scrCharts, scrSettings;
 
@@ -127,6 +128,4 @@ public class MainActivity extends AppCompatActivity {
         appbar.setExpanded(true,true);
         Screen.onBack(this);
     }
-
-
 }

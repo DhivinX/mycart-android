@@ -67,7 +67,7 @@ public class RichDateUtils{
 
     public static String getHHMM(long time){
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Settings.locale);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Utils.locale);
 
             return dateFormat.format(new Date(time));
         } catch (Exception e) {

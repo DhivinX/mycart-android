@@ -7,18 +7,14 @@
 package pl.szaradowski.mycart.common;
 
 import android.content.Context;
-import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import pl.szaradowski.mycart.R;
 
@@ -26,7 +22,7 @@ public class Receipt {
     private int product_last_id;
     private int id;
     private String name;
-    private String currency = Settings.currency;
+    private String currency = Utils.currency;
     private ArrayList<Product> products = new ArrayList<>();
     private long time;
 
@@ -71,7 +67,7 @@ public class Receipt {
     }
 
     public String getTimeString(Context ctx){
-        String tstr = "";
+        String tstr;
 
         if(RichDateUtils.isToday(time)) tstr = RichDateUtils.getHHMM(time);
         else if(RichDateUtils.isYesterday(time)) tstr = ctx.getString(R.string.yesterday);
@@ -89,6 +85,16 @@ public class Receipt {
 
     public ArrayList<Product> getProducts() {
         return products;
+    }
+
+    public float getVal(){
+        float sum = 0;
+
+        for(Product p : getProducts()){
+            sum += p.getVal();
+        }
+
+        return sum;
     }
 
     public Product getProduct(int id){
@@ -132,8 +138,10 @@ public class Receipt {
         int index = 0;
 
         for(Product item : products){
-            File f = new File(ctx.getFilesDir(), item.getImgPath());
-            f.delete();
+            if(item.getImgPath() != null) {
+                File f = new File(ctx.getFilesDir(), item.getImgPath());
+                f.delete();
+            }
         }
 
         products.clear();
@@ -177,6 +185,18 @@ public class Receipt {
         return null;
     }
 
+    public static Product getLastProductFrom(Product product){
+        for(Receipt r : receipts){
+            for(Product p : r.getProducts()){
+                if(product.getTime() > p.getTime() && product.getName().equalsIgnoreCase(p.getName()) && product.getReceipt_id() != p.getReceipt_id()){
+                    return p;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static boolean removeById(Context ctx, int id){
         int index = 0;
 
@@ -202,14 +222,16 @@ public class Receipt {
 
         receipts.add(item);
 
+        return item;
+    }
+
+    public static void sort(){
         Collections.sort(receipts, new Comparator<Receipt>() {
             @Override
             public int compare(Receipt o1, Receipt o2) {
-                return o2.getId() - o1.getId();
+                return o2.getTime() < o1.getTime() ? -1 : o1.getTime() > o2.getTime() ? 1 : 0;
             }
         });
-
-        return item;
     }
 
     public static JsonObject allToJson(){

@@ -22,6 +22,7 @@ public class Product {
     private float price;
     private float cnt;
     private String img;
+    private int type = 0;
     private long time;
 
     public int getId() {
@@ -34,6 +35,10 @@ public class Product {
 
     public void setReceiptId(int id) {
         this.receipt_id = id;
+    }
+
+    public int getReceipt_id() {
+        return receipt_id;
     }
 
     public String getName() {
@@ -68,6 +73,14 @@ public class Product {
         this.time = time;
     }
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public float getVal(){
         return getCnt() * getPrice();
     }
@@ -98,13 +111,14 @@ public class Product {
         j.addProperty("cnt", cnt);
         j.addProperty("img", img);
         j.addProperty("time", time);
+        j.addProperty("type", type);
 
         return j;
     }
 
     public void setImg(Context ctx, Bitmap img) {
         try {
-            this.img = "product_img_rc"+receipt_id+"_id"+id+".jpg";
+            this.img = "product_img_rc"+receipt_id+"_id"+id+"_t"+System.currentTimeMillis()+".jpg";
             File f = new File(ctx.getFilesDir(), this.img);
 
             FileOutputStream out = new FileOutputStream(f);
@@ -124,7 +138,7 @@ public class Product {
 
     public String getCurrency() {
         if(receipt_id == -1){
-            return Settings.currency;
+            return Utils.currency;
         }
 
         return Receipt.getById(receipt_id).getCurrency();

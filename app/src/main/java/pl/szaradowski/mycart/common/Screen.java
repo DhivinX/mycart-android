@@ -40,7 +40,7 @@ public class Screen {
             FragmentManager manager = ((MainActivity) ctx).getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
-            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
             transaction.replace(R.id.body_fragment_container, fragment, tag);
 
             transaction.disallowAddToBackStack();

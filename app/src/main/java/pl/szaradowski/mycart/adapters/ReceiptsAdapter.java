@@ -17,12 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import pl.szaradowski.mycart.R;
-import pl.szaradowski.mycart.common.Product;
 import pl.szaradowski.mycart.common.Receipt;
-import pl.szaradowski.mycart.common.Settings;
+import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.RichTextView;
 
 public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
@@ -71,14 +69,10 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
         Receipt item = data.get(pos);
 
         int products_cnt = item.getProducts().size();
-        float price_all = 0;
-
-        for(Product p : item.getProducts()){
-            price_all += p.getVal();
-        }
+        float price_all = item.getVal();
 
         holder.name.setText(item.getName());
-        holder.subname.setText(ctx.getString(R.string.receipt_subname, products_cnt, String.format(Settings.locale, "%.2f", price_all) , item.getCurrency()));
+        holder.subname.setText(ctx.getString(R.string.receipt_subname, products_cnt, String.format(Utils.locale, "%.2f", price_all) , Utils.currency));
         holder.date.setText(item.getTimeString(ctx));
 
         if(pos % 3 == 0) holder.dot.setBackground(ContextCompat.getDrawable(ctx, R.drawable.circle_shape_pink));
