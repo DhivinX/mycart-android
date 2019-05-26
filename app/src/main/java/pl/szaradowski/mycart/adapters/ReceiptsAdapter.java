@@ -74,11 +74,12 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
         float price_all = 0;
 
         for(Product p : item.getProducts()){
-            price_all += p.getPrice();
+            price_all += p.getVal();
         }
 
         holder.name.setText(item.getName());
         holder.subname.setText(ctx.getString(R.string.receipt_subname, products_cnt, String.format(Settings.locale, "%.2f", price_all) , item.getCurrency()));
+        holder.date.setText(item.getTimeString(ctx));
 
         if(pos % 3 == 0) holder.dot.setBackground(ContextCompat.getDrawable(ctx, R.drawable.circle_shape_pink));
         else if(pos % 2 == 0) holder.dot.setBackground(ContextCompat.getDrawable(ctx, R.drawable.circle_shape_cyan));

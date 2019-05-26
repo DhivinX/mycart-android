@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 22.05.19 08:48
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Last modified 21.05.19 15:00
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="#31857C"
+    tools:targetApi="lollipop">
+
+    <item android:id="@android:id/mask">
+        <shape
+            android:shape="rectangle">
+
+            <corners android:radius="30dp" />
+            <solid android:color="#31857C" />
+            <stroke
+                android:width="1dip"
+                android:color="#31857C" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/background">
+        <shape
+            android:shape="rectangle">
+
+            <corners android:radius="30dp" />
+            <solid android:color="#4AC2B5" />
+            <stroke
+                android:width="1dip"
+                android:color="#4AC2B5" />
+        </shape>
+    </item>
+</ripple>

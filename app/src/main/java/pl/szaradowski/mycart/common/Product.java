@@ -6,14 +6,23 @@
 
 package pl.szaradowski.mycart.common;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class Product {
     private int id = -1;
+    private int receipt_id = -1;
     private String name;
     private float price;
     private float cnt;
-    private Bitmap img;
+    private String img;
+    private long time;
 
     public int getId() {
         return id;
@@ -21,6 +30,10 @@ public class Product {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setReceiptId(int id) {
+        this.receipt_id = id;
     }
 
     public String getName() {
@@ -47,11 +60,73 @@ public class Product {
         this.cnt = cnt;
     }
 
-    public Bitmap getImg() {
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public float getVal(){
+        return getCnt() * getPrice();
+    }
+
+    public Bitmap getImg(Context ctx) {
+        if(this.img == null) return null;
+
+        File f = new File(ctx.getFilesDir(), this.img);
+        Bitmap bitmap = null;
+
+        try {
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public JsonObject getJson(){
+        JsonObject j = new JsonObject();
+
+        j.addProperty("id", id);
+        j.addProperty("receipt_id", receipt_id);
+        j.addProperty("name", name);
+        j.addProperty("price", price);
+        j.addProperty("cnt", cnt);
+        j.addProperty("img", img);
+        j.addProperty("time", time);
+
+        return j;
+    }
+
+    public void setImg(Context ctx, Bitmap img) {
+        try {
+            this.img = "product_img_rc"+receipt_id+"_id"+id+".jpg";
+            File f = new File(ctx.getFilesDir(), this.img);
+
+            FileOutputStream out = new FileOutputStream(f);
+            img.compress(Bitmap.CompressFormat.JPEG, 60, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setImgPath(String path) {
+        this.img = path;
+    }
+
+    public String getImgPath() {
         return img;
     }
 
-    public void setImg(Bitmap img) {
-        this.img = img;
+    public String getCurrency() {
+        if(receipt_id == -1){
+            return Settings.currency;
+        }
+
+        return Receipt.getById(receipt_id).getCurrency();
     }
 }

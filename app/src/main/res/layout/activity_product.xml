@@ -11,6 +11,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
+    android:id="@+id/rootView"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context=".activities.ProductActivity">
 
     <SurfaceView
@@ -25,23 +28,144 @@
 
         <include layout="@layout/inc_top_bar_product" />
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:background="@drawable/activity_background"
             android:layout_marginTop="240dp"
+            android:padding="20dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/mTextView"
-                android:textSize="25sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:text="recognized text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/ivPicture"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp" />
+
+                <android.support.v7.widget.CardView
+                    app:cardUseCompatPadding="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <pl.szaradowski.mycart.components.RichTextView
+                            android:textSize="16sp"
+                            android:textColor="#000"
+                            android:text="@string/product_name"
+                            app:textFont="Font-Light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <pl.szaradowski.mycart.components.RichEditText
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/etName"
+                            android:inputType="textAutoComplete"
+                            android:gravity="center"
+                            app:textFont="Font-Regular"
+                            android:hint="@string/type_product_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    app:cardUseCompatPadding="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <pl.szaradowski.mycart.components.RichTextView
+                            android:textSize="16sp"
+                            android:textColor="#000"
+                            android:text="@string/product_price"
+                            app:textFont="Font-Light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <pl.szaradowski.mycart.components.RichEditText
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/etPrice"
+                            android:inputType="numberDecimal"
+                            android:gravity="center"
+                            app:textFont="Font-Regular"
+                            android:hint="@string/type_product_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    app:cardUseCompatPadding="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <pl.szaradowski.mycart.components.RichTextView
+                            android:textSize="16sp"
+                            android:textColor="#000"
+                            android:text="@string/product_cnt"
+                            app:textFont="Font-Light"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <pl.szaradowski.mycart.components.RichEditText
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/etCnt"
+                            android:inputType="numberDecimal"
+                            android:gravity="center"
+                            app:textFont="Font-Regular"
+                            android:hint="@string/type_product_cnt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/fav"
+        android:layout_gravity="end"
+        android:padding="14dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="140dp"
+        android:src="@drawable/icon_fav"
+        android:background="@drawable/circle_button_dark"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/save"
+        android:layout_gravity="end"
+        android:padding="14dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="85dp"
+        android:src="@drawable/icon_save"
+        android:background="@drawable/circle_button_dark"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <pl.szaradowski.mycart.components.IconButton
         android:id="@+id/camera"

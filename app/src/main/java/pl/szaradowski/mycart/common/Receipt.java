@@ -6,10 +6,21 @@
 
 package pl.szaradowski.mycart.common;
 
+import android.content.Context;
+import android.text.format.DateUtils;
+import android.util.Log;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+
+import pl.szaradowski.mycart.R;
 
 public class Receipt {
     private int product_last_id;
@@ -17,7 +28,15 @@ public class Receipt {
     private String name;
     private String currency = Settings.currency;
     private ArrayList<Product> products = new ArrayList<>();
-    private Date date;
+    private long time;
+
+    public int getProduct_last_id() {
+        return product_last_id;
+    }
+
+    public void setProduct_last_id(int product_last_id) {
+        this.product_last_id = product_last_id;
+    }
 
     public int getId() {
         return id;
@@ -43,12 +62,29 @@ public class Receipt {
         this.currency = name;
     }
 
-    public Date getDate() {
-        return date;
+    public long getTime() {
+        return time;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public String getTimeString(Context ctx){
+        String tstr = "";
+
+        if(RichDateUtils.isToday(time)) tstr = RichDateUtils.getHHMM(time);
+        else if(RichDateUtils.isYesterday(time)) tstr = ctx.getString(R.string.yesterday);
+        else if(RichDateUtils.isLast5day(time)) {
+            tstr = ctx.getString(ctx.getResources().getIdentifier("day_sm_" + RichDateUtils.getDayOfWeek(time), "string", ctx.getPackageName()));
+        }
+        else if(RichDateUtils.isThisYear(time)) {
+            tstr = RichDateUtils.getDayNumber(time) +" " + ctx.getString(ctx.getResources().getIdentifier("month_sm_" + RichDateUtils.getMonthNumber(time), "string", ctx.getPackageName()));
+        }else{
+            tstr = RichDateUtils.getDayNumber(time) + " " + ctx.getString(ctx.getResources().getIdentifier("month_sm_" + RichDateUtils.getMonthNumber(time), "string", ctx.getPackageName()))+ " " + RichDateUtils.getYear(time);
+        }
+
+        return tstr;
     }
 
     public ArrayList<Product> getProducts() {
@@ -68,16 +104,20 @@ public class Receipt {
         product_last_id++;
 
         p.setId(product_last_id);
+        p.setReceiptId(this.getId());
         products.add(p);
 
         return products;
     }
 
-    public boolean removeProduct(Product p){
+    public boolean removeProduct(Context ctx, Product p){
         int index = 0;
 
         for(Product item : products){
             if(item.getId() == p.getId()) {
+                File f = new File(ctx.getFilesDir(), item.getImgPath());
+                f.delete();
+
                 products.remove(index);
                 return true;
             }
@@ -88,8 +128,40 @@ public class Receipt {
         return false;
     }
 
+    public void clearProducts(Context ctx){
+        int index = 0;
+
+        for(Product item : products){
+            File f = new File(ctx.getFilesDir(), item.getImgPath());
+            f.delete();
+        }
+
+        products.clear();
+    }
+
+    public JsonObject getJson(){
+        JsonObject j = new JsonObject();
+
+        j.addProperty("id", id);
+        j.addProperty("product_last_id", product_last_id);
+        j.addProperty("name", name);
+        j.addProperty("currency", currency);
+        j.addProperty("time", time);
+
+        JsonArray pr = new JsonArray();
+
+        for(Product p : products){
+            pr.add(p.getJson());
+        }
+
+        j.add("products", pr);
+
+        return j;
+    }
+
+
     // STATIC
-    private static int last_id = 0;
+    public static int last_id = 0;
     private static ArrayList<Receipt> receipts = new ArrayList<>();
 
     public static ArrayList<Receipt> getList(){
@@ -105,11 +177,12 @@ public class Receipt {
         return null;
     }
 
-    public static boolean removeById(int id){
+    public static boolean removeById(Context ctx, int id){
         int index = 0;
 
         for(Receipt item : receipts){
             if(item.getId() == id) {
+                item.clearProducts(ctx);
                 receipts.remove(index);
                 return true;
             }
@@ -137,5 +210,20 @@ public class Receipt {
         });
 
         return item;
+    }
+
+    public static JsonObject allToJson(){
+        JsonObject j = new JsonObject();
+        j.addProperty("last_id", last_id);
+
+        JsonArray rc = new JsonArray();
+
+        for(Receipt r : receipts){
+            rc.add(r.getJson());
+        }
+
+        j.add("receipts", rc);
+
+        return j;
     }
 }

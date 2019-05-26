@@ -7,4 +7,8 @@
     <declare-styleable name="RichButton">
         <attr name="textFont"/>
     </declare-styleable>
+
+    <declare-styleable name="RichEditText">
+        <attr name="textFont"/>
+    </declare-styleable>
 </resources>

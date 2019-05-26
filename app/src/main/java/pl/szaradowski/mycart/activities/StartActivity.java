@@ -18,6 +18,7 @@ import android.os.Bundle;
 import java.util.Objects;
 
 import pl.szaradowski.mycart.R;
+import pl.szaradowski.mycart.common.Settings;
 
 public class StartActivity extends AppCompatActivity {
     String[] PERMISSIONS = {
@@ -48,6 +49,8 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if(hasPermissions(StartActivity.this, PERMISSIONS)){
+                    Settings.loadAll(StartActivity.this);
+
                     Intent intent = new Intent(StartActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{
