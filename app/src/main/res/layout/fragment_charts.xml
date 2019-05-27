@@ -60,7 +60,7 @@
                     <pl.szaradowski.mycart.components.RichTextView
                         android:textSize="16sp"
                         android:textColor="#000"
-                        android:text="Ostatnie 6 miesięcy"
+                        android:text="@string/charts_last_6"
                         app:textFont="Font-Light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -133,6 +133,36 @@
                         app:textFont="Font-Light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                app:cardUseCompatPadding="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <pl.szaradowski.mycart.components.RichTextView
+                        android:id="@+id/tvReceiptTitle"
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:text="@string/charts_title_receipt"
+                        app:textFont="Font-Light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/chReceipt"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

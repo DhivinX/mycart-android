@@ -33,4 +33,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <android.support.v4.widget.NestedScrollView
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                app:cardUseCompatPadding="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <pl.szaradowski.mycart.components.RichTextView
+                        android:textSize="16sp"
+                        android:textColor="#000"
+                        android:text="Waluta"
+                        app:textFont="Font-Light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <pl.szaradowski.mycart.components.RichButton
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#fff"
+                        android:background="@drawable/circle_button_dark"
+                        android:id="@+id/btnCurrency"
+                        android:layout_weight="1"
+                        android:text="Polski Złoty - zł"
+                        app:textFont="Font-Light"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

@@ -6,6 +6,7 @@
 
 package pl.szaradowski.mycart.activities;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -18,6 +19,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+
+import java.util.Calendar;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.adapters.ProductsAdapter;
@@ -208,6 +212,30 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
             });
 
             finish();
+        }
+
+        if(action.equals("date")){
+            final Calendar date = Calendar.getInstance();
+            date.setTimeInMillis(receipt.getTime());
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    date.set(year, month, dayOfMonth);
+                    receipt.setTime(date.getTimeInMillis());
+
+                    Receipt.sort();
+
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.saveReceipts(ReceiptActivity.this);
+                        }
+                    });
+                }
+            }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
+            datePickerDialog.show();
         }
 
         return false;

@@ -11,12 +11,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.common.Utils;
+import pl.szaradowski.mycart.components.RichButton;
+import pl.szaradowski.mycart.components.RichTextView;
 
 public class StartActivity extends AppCompatActivity {
     String[] PERMISSIONS = {
@@ -31,13 +36,35 @@ public class StartActivity extends AppCompatActivity {
     Handler h;
     Runnable r;
 
+    RichTextView tvPermText;
+    RichButton btnPerm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        tvPermText = findViewById(R.id.tvPermText);
+        btnPerm = findViewById(R.id.btnPerm);
+
+        btnPerm.setOnClickListener(new RichButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if(!hasPermissions(StartActivity.this, PERMISSIONS)) requestPermissions(PERMISSIONS, 33);
+                }
+            }
+        });
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!hasPermissions(StartActivity.this, PERMISSIONS)) requestPermissions(PERMISSIONS, 33);
+            else {
+                tvPermText.setVisibility(View.GONE);
+                btnPerm.setVisibility(View.GONE);
+            }
+        }else{
+            tvPermText.setVisibility(View.GONE);
+            btnPerm.setVisibility(View.GONE);
         }
 
         h = new Handler();
@@ -46,16 +73,29 @@ public class StartActivity extends AppCompatActivity {
         r = new Runnable() {
             @Override
             public void run() {
-                if(hasPermissions(StartActivity.this, PERMISSIONS)){
+                if(hasPermissions(StartActivity.this, PERMISSIONS) || android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
                     Utils.loadAll(StartActivity.this);
 
                     Intent intent = new Intent(StartActivity.this, MainActivity.class);
                     startActivity(intent);
+
+                    h.removeCallbacks(this);
                 }else{
                     h.postDelayed(this, 2000);
                 }
             }
         };
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(hasPermissions(StartActivity.this, PERMISSIONS)) {
+            tvPermText.setVisibility(View.GONE);
+            btnPerm.setVisibility(View.GONE);
+        }else{
+            tvPermText.setVisibility(View.VISIBLE);
+            btnPerm.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

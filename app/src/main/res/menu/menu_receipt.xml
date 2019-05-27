@@ -11,6 +11,10 @@
         android:title="@string/products_menu_item1"/>
 
     <item  android:id="@+id/item2"
+        android:titleCondensed="date"
+        android:title="@string/receipt_change_date"/>
+
+    <item  android:id="@+id/item3"
         android:titleCondensed="delete"
         android:title="@string/products_menu_item2"/>
 </menu>

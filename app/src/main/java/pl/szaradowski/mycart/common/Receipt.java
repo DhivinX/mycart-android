@@ -22,7 +22,7 @@ public class Receipt {
     private int product_last_id;
     private int id;
     private String name;
-    private String currency = Utils.currency;
+    private Currency currency = Utils.currency;
     private ArrayList<Product> products = new ArrayList<>();
     private long time;
 
@@ -50,12 +50,12 @@ public class Receipt {
         this.name = name;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String name) {
-        this.currency = name;
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public long getTime() {
@@ -153,7 +153,6 @@ public class Receipt {
         j.addProperty("id", id);
         j.addProperty("product_last_id", product_last_id);
         j.addProperty("name", name);
-        j.addProperty("currency", currency);
         j.addProperty("time", time);
 
         JsonArray pr = new JsonArray();

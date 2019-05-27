@@ -19,48 +19,81 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/flLogo"
+    <LinearLayout
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_marginTop="0dp"
-            android:src="@mipmap/ic_launcher_round"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+        <FrameLayout
+            android:id="@+id/flLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_marginTop="0dp"
+                android:src="@mipmap/ic_launcher_round"
+                android:layout_width="70dp"
+                android:layout_height="70dp" />
+
+            <pl.szaradowski.mycart.components.RichTextView
+                android:id="@+id/tvLogoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="38sp"
+                android:layout_marginStart="75dp"
+                android:shadowColor="#000"
+                android:shadowRadius="2"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                app:textFont="Font-Bold"/>
+
+            <pl.szaradowski.mycart.components.RichTextView
+                android:id="@+id/tvLogoTextSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name_sub"
+                android:textAllCaps="true"
+                android:textColor="#CCFFFFFF"
+                android:textSize="20sp"
+                android:layout_marginStart="76dp"
+                android:layout_marginTop="41dp"
+                android:shadowColor="#000"
+                android:shadowRadius="2"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                app:textFont="Font-Light"/>
+        </FrameLayout>
 
         <pl.szaradowski.mycart.components.RichTextView
-            android:id="@+id/tvLogoText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="38sp"
-            android:layout_marginStart="75dp"
+            android:id="@+id/tvPermText"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/permission_text"
+            android:textColor="#fff"
             android:shadowColor="#000"
             android:shadowRadius="2"
             android:shadowDx="1"
             android:shadowDy="1"
-            app:textFont="Font-Bold"/>
-
-        <pl.szaradowski.mycart.components.RichTextView
-            android:id="@+id/tvLogoTextSub"
+            app:textFont="Font-Light"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name_sub"
-            android:textAllCaps="true"
-            android:textColor="#CCFFFFFF"
-            android:textSize="20sp"
-            android:layout_marginStart="76dp"
-            android:layout_marginTop="43dp"
-            android:shadowColor="#000"
-            android:shadowRadius="2"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            app:textFont="Font-Light"/>
-    </FrameLayout>
+            android:layout_height="wrap_content" />
+
+        <pl.szaradowski.mycart.components.RichButton
+            android:layout_marginTop="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textColor="#fff"
+            android:text="@string/permission_btn"
+            app:textFont="Font-Light"
+            android:background="@drawable/circle_button_dark"
+            android:id="@+id/btnPerm"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+    </LinearLayout>
 </FrameLayout>

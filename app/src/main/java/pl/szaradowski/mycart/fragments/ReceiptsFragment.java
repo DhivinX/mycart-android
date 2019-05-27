@@ -122,9 +122,7 @@ public class ReceiptsFragment extends Fragment {
         guide.setConfig(guide_config);
 
         guide.addSequenceItem(((MainActivity) getActivity()).appbar, "Witaj", "test", getString(R.string.guide_understand));
-        //guide.addSequenceItem(((MainActivity) getActivity()).appbar, "This is button two", getString(R.string.guide_understand));
-
-        guide.start();
+        //guide.start();
     }
 
     public void setNewList(final ArrayList<Receipt> receipts){

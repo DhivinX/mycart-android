@@ -25,7 +25,7 @@ import java.io.OutputStreamWriter;
 import java.util.Locale;
 
 public class Utils {
-    public static String currency = "zł";
+    public static Currency currency;
     public static Locale locale = Locale.GERMAN;
     public static int[] types = {0, 1, 2, 3};
 
@@ -69,7 +69,7 @@ public class Utils {
                 or.setId(ritem.get("id").getAsInt());
                 or.setProduct_last_id(ritem.get("product_last_id").getAsInt());
                 or.setName(ritem.get("name").getAsString());
-                or.setCurrency(ritem.get("currency").getAsString());
+                //or.setCurrency(ritem.get("currency").getAsString());
                 or.setTime(ritem.get("time").getAsLong());
 
                 JsonArray epr = ritem.getAsJsonArray("products");

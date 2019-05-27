@@ -136,7 +136,7 @@ public class Product {
         return img;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         if(receipt_id == -1){
             return Utils.currency;
         }

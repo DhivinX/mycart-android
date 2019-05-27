@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">Ile Zapłacę</string>
     <string name="app_name_sub">Przemyślane zakupy!</string>
-    <string name="btn_add_receipt">Nowy paragon</string>
+    <string name="permission_btn">Uprawnienia</string>
+    <string name="permission_text">Ta aplikacja wymaga odpowiednich uprawnień,\n aby działać prawidłowo.</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="save">Zapisz</string>
     <string name="accept">Akceptuj</string>
     <string name="cancel">Anuluj</string>
-    <string name="guide_understand">OK</string>
+    <string name="update">Aktualizuj</string>
 
+    <string name="btn_add_receipt">Nowy paragon</string>
     <string name="receipts">Paragony</string>
     <string name="receipt_sub">Wszystkie zapisane paragony.</string>
     <string name="receipt_list">Lista produktów</string>
@@ -31,12 +33,17 @@
     <string name="save_only_photo">Tylko zdjęcie</string>
     <string name="receipt_changename_dialog_title">Zmień nazwę</string>
     <string name="previous_product">Produkt o tej nazwie kosztował wcześniej %1$s %2$s</string>
+    <string name="remove_cancel_product">Usuń / Anuluj</string>
 
     <string name="settings">Ustawienia</string>
     <string name="settings_sub">Ustawienia konta i aplikacji.</string>
 
     <string name="charts">Trendy</string>
     <string name="charts_sub">Dane historyczne i wykresy.</string>
+    <string name="charts_title_sum">Suma od %1$s do %2$s</string>
+    <string name="charts_title_receipt">Paragony od %1$s do %2$s</string>
+    <string name="charts_last_6">Ostatnie 6 miesięcy</string>
+    <string name="no_chart_data">Brak danych dla wykresu</string>
 
     <string name="today">dziś</string>
     <string name="yesterday">wczoraj</string>
@@ -61,7 +68,6 @@
     <string name="month_sm_10">paź</string>
     <string name="month_sm_11">lis</string>
     <string name="month_sm_12">gru</string>
-    <string name="remove_cancel_product">Usuń / Anuluj</string>
 
     <string name="product_type_0">Inne zakupy</string>
     <string name="product_type_1">Żywność</string>
@@ -69,11 +75,9 @@
     <string name="product_type_3">Usługi</string>
     <string name="product_type_4">Paliwo</string>
 
-    <string name="charts_title_sum">Suma od %1$s do %2$s</string>
-
+    <string name="guide_understand">OK</string>
+    <string name="guide_next">DALEJ</string>
     <string name="guide_add_receipt">Kliknij tutaj, aby dodać nowy paragon.</string>
     <string name="guide_list_receipt">Tutaj pojawią się Twoje paragony - listy z produktami.</string>
-
-
-
+    <string name="receipt_change_date">Zmień datę</string>
 </resources>

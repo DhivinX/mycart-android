@@ -14,6 +14,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
@@ -41,12 +45,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.dynamite.DynamiteModule;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.List;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.common.Product;
@@ -167,25 +176,27 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         camera.setOnClickListener(new IconButton.OnClickListener() {
             @Override
             public void onClick() {
-                mCameraSource.takePicture(new CameraSource.ShutterCallback() {
-                    @Override
-                    public void onShutter() {
+                if(mCameraSource != null) {
+                    mCameraSource.takePicture(new CameraSource.ShutterCallback() {
+                        @Override
+                        public void onShutter() {
 
-                    }
-                }, new CameraSource.PictureCallback() {
-                    @Override
-                    public void onPictureTaken(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        }
+                    }, new CameraSource.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(90);
+                            Matrix matrix = new Matrix();
+                            if(bitmap.getWidth() > bitmap.getHeight()) matrix.postRotate(90);
 
-                        bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
-                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                            bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
+                            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-                        sendBitmapAndShowDetections(bitmap);
-                    }
-                });
+                            sendBitmapAndShowDetections(bitmap);
+                        }
+                    });
+                }
             }
         });
 
@@ -354,51 +365,80 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
     }
 
     private void startCameraSource(){
-        final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
 
-        if(textRecognizer.isOperational()){
-            mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
-                    .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1000, 1000)
-                    .setAutoFocusEnabled(true)
-                    .setRequestedFps(30.0f)
-                    .build();
+        if(status == ConnectionResult.SUCCESS){
+            final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
 
-            mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                @Override
-                public void surfaceCreated(SurfaceHolder holder) {
-                    try {
-                        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(ProductActivity.this, new String[]{Manifest.permission.CAMERA}, 33);
-                            return;
+            try{
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int width = displayMetrics.widthPixels;
+
+                mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
+                        .setFacing(CameraSource.CAMERA_FACING_BACK)
+                        .setRequestedPreviewSize(width, width)
+                        .setAutoFocusEnabled(true)
+                        .setRequestedFps(30.0f)
+                        .build();
+
+                mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
+                    @Override
+                    public void surfaceCreated(SurfaceHolder holder) {
+                        try {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(ProductActivity.this, new String[]{Manifest.permission.CAMERA}, 33);
+                                return;
+                            }
+
+                            mCameraSource.start(mCameraView.getHolder());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        mCameraSource.start(mCameraView.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
 
-                @Override
-                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                }
+                    @Override
+                    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                    }
 
+                    @Override
+                    public void surfaceDestroyed(SurfaceHolder holder) {
+                        mCameraSource.stop();
+                    }
+                });
+
+                textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+                    @Override
+                    public void release() {
+                    }
+
+                    @Override
+                    public void receiveDetections(Detector.Detections<TextBlock> detections) {
+                        items_recognized = detections.getDetectedItems();
+                    }
+                });
+            }catch (Exception e){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startCameraSource();
+                    }
+                }, 5000);
+            }
+        }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
+            builder.setTitle("Proszę zaaktualizować Usługi GooglePlay.");
+
+            builder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
                 @Override
-                public void surfaceDestroyed(SurfaceHolder holder) {
-                    mCameraSource.stop();
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms")));
+                    dialog.dismiss();
+                    finish();
                 }
             });
 
-            textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
-                @Override
-                public void release() {
-                }
-
-                @Override
-                public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                    items_recognized = detections.getDetectedItems();
-                }
-            });
+            builder.show();
         }
     }
 
