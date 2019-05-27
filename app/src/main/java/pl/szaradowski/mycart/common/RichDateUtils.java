@@ -11,6 +11,7 @@ import android.text.format.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class RichDateUtils{
     public static boolean isToday(long time) {
@@ -67,7 +68,7 @@ public class RichDateUtils{
 
     public static String getHHMM(long time){
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Utils.locale);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
             return dateFormat.format(new Date(time));
         } catch (Exception e) {

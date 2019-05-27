@@ -135,12 +135,4 @@ public class Product {
     public String getImgPath() {
         return img;
     }
-
-    public Currency getCurrency() {
-        if(receipt_id == -1){
-            return Utils.currency;
-        }
-
-        return Receipt.getById(receipt_id).getCurrency();
-    }
 }

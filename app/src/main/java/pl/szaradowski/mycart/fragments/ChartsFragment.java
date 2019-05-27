@@ -250,8 +250,7 @@ public class ChartsFragment extends Fragment {
                         , HtmlCompat.FROM_HTML_MODE_LEGACY)
         );
 
-        tvSum.setText(String.format(Utils.locale, "%.2f", sum) + " " + Utils.currency);
-
+        tvSum.setText(Utils.currency.formatPrice(sum));
     }
 
     private void drawChart6(ArrayList<BarEntry> entries, final ArrayList<String> months){
@@ -288,7 +287,7 @@ public class ChartsFragment extends Fragment {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 if(e.getY() > 0) {
-                    chart_info.setText(String.format(Utils.locale, "%.2f", e.getY()) + " " + Utils.currency);
+                    chart_info.setText(Utils.currency.formatPrice(e.getY()));
                     chart_info.show();
                 }
             }
@@ -349,7 +348,7 @@ public class ChartsFragment extends Fragment {
 
                     String time = c.get(Calendar.DAY_OF_MONTH) + " " + getContext().getString(getContext().getResources().getIdentifier("month_sm_" + (c.get(Calendar.MONTH) + 1), "string", getContext().getPackageName()));
 
-                    chart_info.setText(time + " --- " + String.format(Utils.locale, "%.2f", e.getY()) + " " + Utils.currency);
+                    chart_info.setText(time + " --- " + Utils.currency.formatPrice(e.getY()));
                     chart_info.show();
                 }
             }

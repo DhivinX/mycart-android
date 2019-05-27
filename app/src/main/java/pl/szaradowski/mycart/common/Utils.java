@@ -6,7 +6,9 @@
 
 package pl.szaradowski.mycart.common;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -22,14 +24,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Locale;
+import java.util.ArrayList;
+
+import pl.szaradowski.mycart.R;
 
 public class Utils {
     public static Currency currency;
-    public static Locale locale = Locale.GERMAN;
     public static int[] types = {0, 1, 2, 3};
 
-    public static void saveReceipts(Context ctx){
+    public static void saveAll(Context ctx){
         JsonObject receipt = Receipt.allToJson();
 
         Gson g = new Gson();
@@ -45,9 +48,31 @@ public class Utils {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        SharedPreferences.Editor preferencesEditor = ctx.getSharedPreferences("settings", Activity.MODE_PRIVATE).edit();
+        preferencesEditor.putString("currency", g.toJson(currency.getJson()));
+        preferencesEditor.commit();
     }
 
     public static void loadAll(Context ctx){
+        JsonParser parser = new JsonParser();
+
+        Currency.addCurrency(new Currency("EUR", "Euro", "", " €"));
+        Currency.addCurrency(new Currency("USD", "Dolar amerykański", "$", ""));
+        Currency.addCurrency(new Currency("GBP", "Brytyjski funt szterling", "£", ""));
+        Currency.addCurrency(new Currency("PLN", "Polski złoty", "", " zł"));
+        Currency.addCurrency(new Currency("RUB", "Rubel rosyjski", "", " руб"));
+        Currency.addCurrency(new Currency("CNY", "Chiński yuan", "", " ¥"));
+
+        SharedPreferences preferences = ctx.getSharedPreferences("settings", Activity.MODE_PRIVATE);
+        String currency = preferences.getString("currency", "");
+
+        if(currency.length() > 0){
+            Utils.currency = new Currency(parser.parse(currency).getAsJsonObject());
+        }else{
+            Utils.currency = Currency.getById(ctx.getString(R.string.def_currency));
+        }
+
         try {
             Receipt.getList().clear();
 
@@ -55,42 +80,13 @@ public class Utils {
             FileInputStream fin = new FileInputStream(file_receipt);
             String ret = convertStreamToString(fin);
 
-            JsonParser parser = new JsonParser();
             JsonObject json = parser.parse(ret).getAsJsonObject();
 
             Receipt.last_id = json.get("last_id").getAsInt();
             JsonArray receipts = json.getAsJsonArray("receipts");
 
             for(JsonElement elr : receipts){
-                JsonObject ritem = elr.getAsJsonObject();
-
-                Receipt or = new Receipt();
-
-                or.setId(ritem.get("id").getAsInt());
-                or.setProduct_last_id(ritem.get("product_last_id").getAsInt());
-                or.setName(ritem.get("name").getAsString());
-                //or.setCurrency(ritem.get("currency").getAsString());
-                or.setTime(ritem.get("time").getAsLong());
-
-                JsonArray epr = ritem.getAsJsonArray("products");
-
-                for(JsonElement pr : epr) {
-                    JsonObject pitem = pr.getAsJsonObject();
-                    Product p = new Product();
-
-                    p.setId(pitem.get("id").getAsInt());
-                    p.setReceiptId(pitem.get("receipt_id").getAsInt());
-                    p.setName(pitem.get("name").getAsString());
-                    p.setPrice(pitem.get("price").getAsFloat());
-                    p.setCnt(pitem.get("cnt").getAsFloat());
-                    if(pitem.get("img") != null) p.setImgPath(pitem.get("img").getAsString());
-                    p.setTime(pitem.get("time").getAsLong());
-                    p.setType(pitem.get("type").getAsInt());
-
-                    or.getProducts().add(p);
-                }
-
-                Receipt.getList().add(or);
+                new Receipt(elr.getAsJsonObject());
             }
 
             fin.close();

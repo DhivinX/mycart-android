@@ -126,7 +126,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
             product = receipt.getProduct(product_id);
 
             etName.setText(product.getName());
-            etPrice.setText(String.format(Utils.locale, "%.2f", product.getPrice()));
+            etPrice.setText(Utils.currency.format(product.getPrice()));
             etCnt.setText(product.getCnt()+"");
 
             if(product.getImg(this) != null){
@@ -293,11 +293,11 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
 
         if(p != null){
             previous_product.setVisibility(View.VISIBLE);
-            etPrice.setText(String.format(Utils.locale, "%.2f", p.getPrice()));
+            etPrice.setText(Utils.currency.format(p.getPrice()));
 
             previous_product_text.setText(
                     HtmlCompat.fromHtml(
-                            getString(R.string.previous_product, "<b><font color='red'>"+String.format(Utils.locale, "%.2f", p.getPrice()), p.getCurrency())+"</font></b>",
+                            getString(R.string.previous_product, "<b><font color='red'>"+Utils.currency.formatPrice(p.getPrice()))+"</font></b>",
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                     )
             );

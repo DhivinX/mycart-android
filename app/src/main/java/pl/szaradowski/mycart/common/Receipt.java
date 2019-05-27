@@ -9,6 +9,7 @@ package pl.szaradowski.mycart.common;
 import android.content.Context;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.File;
@@ -22,9 +23,39 @@ public class Receipt {
     private int product_last_id;
     private int id;
     private String name;
-    private Currency currency = Utils.currency;
     private ArrayList<Product> products = new ArrayList<>();
     private long time;
+
+    public Receipt(){
+
+    }
+
+    public Receipt(JsonObject j){
+        this.setId(j.get("id").getAsInt());
+        this.setProduct_last_id(j.get("product_last_id").getAsInt());
+        this.setName(j.get("name").getAsString());
+        this.setTime(j.get("time").getAsLong());
+
+        JsonArray epr = j.getAsJsonArray("products");
+
+        for(JsonElement pr : epr) {
+            JsonObject pitem = pr.getAsJsonObject();
+            Product p = new Product();
+
+            p.setId(pitem.get("id").getAsInt());
+            p.setReceiptId(pitem.get("receipt_id").getAsInt());
+            p.setName(pitem.get("name").getAsString());
+            p.setPrice(pitem.get("price").getAsFloat());
+            p.setCnt(pitem.get("cnt").getAsFloat());
+            if(pitem.get("img") != null) p.setImgPath(pitem.get("img").getAsString());
+            p.setTime(pitem.get("time").getAsLong());
+            p.setType(pitem.get("type").getAsInt());
+
+            this.getProducts().add(p);
+        }
+
+        Receipt.getList().add(this);
+    }
 
     public int getProduct_last_id() {
         return product_last_id;
@@ -48,14 +79,6 @@ public class Receipt {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public long getTime() {

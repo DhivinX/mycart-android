@@ -73,7 +73,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         Product item = data.get(pos);
 
         holder.name.setText(item.getName());
-        holder.price.setText(String.format(Utils.locale, "%.2f", item.getVal())+" "+ Utils.currency);
+        holder.price.setText(Utils.currency.formatPrice(item.getVal()));
         holder.subname.setText(ctx.getString(R.string.item_product_subname, item.getCnt()+""));
 
         RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(ctx.getResources(), item.getImg(ctx));

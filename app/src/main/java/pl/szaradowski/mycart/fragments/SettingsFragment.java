@@ -6,8 +6,10 @@
 
 package pl.szaradowski.mycart.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,29 +43,22 @@ public class SettingsFragment extends Fragment {
 
         btnCurrency = view.findViewById(R.id.btnCurrency);
 
+        btnCurrency.setText(Utils.currency.getId() + " - " + Utils.currency.getName());
+
         btnCurrency.setOnClickListener(new RichButton.OnClickListener() {
             @Override
             public void onClick() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setIcon(R.drawable.icon_change_dark);
-                builder.setTitle(R.string.product_dialog_ocr_title);
+                builder.setTitle(R.string.settings_currency_title);
 
-                final ArrayAdapter<Currency> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_item);
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_item);
 
-                arrayAdapter.addAll(
-                        new Currency("Euro EUR", "€", " "),
-                        new Currency("Dolar amerykański USD", "$", " "),
-                        new Currency("Polski złoty PLN", "", " zł")
-                );
+                for(Currency c : Currency.getAll()){
+                    arrayAdapter.add(c.getId() + " - " + c.getName());
+                }
 
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setPositiveButton(R.string.save_only_photo, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -73,8 +68,10 @@ public class SettingsFragment extends Fragment {
                 builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Currency currency = arrayAdapter.getItem(which);
-                        Utils.currency = currency;
+                        Utils.currency = Currency.getAll().get(which);
+                        btnCurrency.setText(Utils.currency.getId() + " - " + Utils.currency.getName());
+
+                        Utils.saveAll(getContext());
                     }
                 });
 

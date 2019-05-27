@@ -134,13 +134,13 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
 
             receipt_name.setText(receipt.getName());
 
-            subname.setText(getString(R.string.receipt_subname, products_cnt, String.format(Utils.locale, "%.2f", price_all), receipt.getCurrency()));
-            price.setText(String.format(Utils.locale, "%.2f", price_all) + " " + Utils.currency);
+            subname.setText(getString(R.string.receipt_subname, products_cnt, Utils.currency.formatPrice(price_all)));
+            price.setText(Utils.currency.formatPrice(price_all));
 
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.saveReceipts(ReceiptActivity.this);
+                    Utils.saveAll(ReceiptActivity.this);
                 }
             });
         }
@@ -190,7 +190,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            Utils.saveReceipts(ReceiptActivity.this);
+                            Utils.saveAll(ReceiptActivity.this);
                         }
                     });
 
@@ -207,7 +207,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.saveReceipts(ReceiptActivity.this);
+                    Utils.saveAll(ReceiptActivity.this);
                 }
             });
 
@@ -229,7 +229,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {
-                            Utils.saveReceipts(ReceiptActivity.this);
+                            Utils.saveAll(ReceiptActivity.this);
                         }
                     });
                 }

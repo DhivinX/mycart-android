@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Ile Zapłacę</string>
+    <string name="def_currency">PLN</string>
+
     <string name="app_name_sub">Przemyślane zakupy!</string>
     <string name="permission_btn">Uprawnienia</string>
     <string name="permission_text">Ta aplikacja wymaga odpowiednich uprawnień,\n aby działać prawidłowo.</string>
@@ -15,7 +17,7 @@
     <string name="receipt_sub">Wszystkie zapisane paragony.</string>
     <string name="receipt_list">Lista produktów</string>
     <string name="receipt_def_name">Paragon #</string>
-    <string name="receipt_subname">%1$d pozycji na kwotę %2$s %3$s</string>
+    <string name="receipt_subname">%1$d pozycji na kwotę %2$s</string>
     <string name="products_menu_item1">Zmień nazwę</string>
     <string name="products_menu_item2">Usuń</string>
     <string name="product_title">Karta produktu</string>
@@ -32,11 +34,12 @@
     <string name="item_product_subname">Ilość: %1$s</string>
     <string name="save_only_photo">Tylko zdjęcie</string>
     <string name="receipt_changename_dialog_title">Zmień nazwę</string>
-    <string name="previous_product">Produkt o tej nazwie kosztował wcześniej %1$s %2$s</string>
+    <string name="previous_product">Produkt o tej nazwie kosztował wcześniej %1$s</string>
     <string name="remove_cancel_product">Usuń / Anuluj</string>
 
     <string name="settings">Ustawienia</string>
     <string name="settings_sub">Ustawienia konta i aplikacji.</string>
+    <string name="settings_currency_title">Wybierz walutę</string>
 
     <string name="charts">Trendy</string>
     <string name="charts_sub">Dane historyczne i wykresy.</string>
