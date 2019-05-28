@@ -31,6 +31,7 @@ import pl.szaradowski.mycart.activities.MainActivity;
 import pl.szaradowski.mycart.activities.ReceiptActivity;
 import pl.szaradowski.mycart.adapters.ReceiptsAdapter;
 import pl.szaradowski.mycart.common.Receipt;
+import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.IconButton;
 import pl.szaradowski.mycart.components.RichTextView;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
@@ -45,8 +46,9 @@ public class ReceiptsFragment extends Fragment {
     Calendar date;
 
     RichTextView title;
+    RichTextView tvSubtitle;
 
-    ArrayList<Receipt> tmp_receipts = new ArrayList<>();
+    ArrayList<Receipt> receipts = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,16 +65,34 @@ public class ReceiptsFragment extends Fragment {
         add = view.findViewById(R.id.add);
         btnDate = view.findViewById(R.id.btnDate);
         title = view.findViewById(R.id.title);
+        tvSubtitle = view.findViewById(R.id.tvSubtitle);
 
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        setNewList(Receipt.getList());
+        adapter = new ReceiptsAdapter(receipts, getContext());
+        list.setAdapter(adapter);
+
+        adapter.setFingerListener(new ReceiptsAdapter.FingerListener() {
+            @Override
+            public void onClick(int position) {
+                Receipt item = receipts.get(position);
+
+                Intent intent = new Intent(getActivity(), ReceiptActivity.class);
+                intent.putExtra("id_receipt", item.getId());
+                Objects.requireNonNull(getActivity()).startActivity(intent);
+            }
+
+            @Override
+            public boolean onLongClick(int position) {
+                return false;
+            }
+        });
 
         add.setOnClickListener(new IconButton.OnClickListener() {
             @Override
             public void onClick() {
                 Intent intent = new Intent(getActivity(), ReceiptActivity.class);
-                intent.putExtra("receipt_id", -1);
+                intent.putExtra("id_receipt", -1);
                 Objects.requireNonNull(getActivity()).startActivity(intent);
             }
         });
@@ -83,19 +103,10 @@ public class ReceiptsFragment extends Fragment {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        date.set(year, month, dayOfMonth);
-                        tmp_receipts.clear();
+                        date.set(year, month, dayOfMonth, 0, 0, 0);
+                        date.set(Calendar.MILLISECOND, 0);
 
-                        for(Receipt r : Receipt.getList()){
-                            Calendar c = Calendar.getInstance();
-                            c.setTimeInMillis(r.getTime());
-
-                            if(date.get(Calendar.YEAR) == c.get(Calendar.YEAR) && date.get(Calendar.MONTH) == c.get(Calendar.MONTH) && date.get(Calendar.DAY_OF_MONTH) == c.get(Calendar.DAY_OF_MONTH)){
-                                tmp_receipts.add(r);
-                            }
-                        }
-
-                        setNewList(tmp_receipts);
+                        load();
                     }
                 }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
 
@@ -103,10 +114,6 @@ public class ReceiptsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON_NEGATIVE) {
                             date = Calendar.getInstance();
-
-                            setNewList(Receipt.getList());
-
-                            tmp_receipts.clear();
                         }
                     }
                 });
@@ -125,39 +132,27 @@ public class ReceiptsFragment extends Fragment {
         //guide.start();
     }
 
-    public void setNewList(final ArrayList<Receipt> receipts){
-        adapter = new ReceiptsAdapter(receipts, getContext());
-        list.setAdapter(adapter);
+    public void load(){
+        if(adapter == null) return;
+        scrollToPosition(0);
 
-        adapter.setFingerListener(new ReceiptsAdapter.FingerListener() {
-            @Override
-            public void onClick(int position) {
-                Receipt item = receipts.get(position);
+        tvSubtitle.setText(getString(R.string.receipt_sub, Utils.db.countAllReceipts()+""));
 
-                Intent intent = new Intent(getActivity(), ReceiptActivity.class);
-                intent.putExtra("receipt_id", item.getId());
-                Objects.requireNonNull(getActivity()).startActivity(intent);
-            }
-
-            @Override
-            public boolean onLongClick(int position) {
-                return false;
-            }
-        });
+        receipts.clear();
+        receipts.addAll(Utils.db.getReceiptsList());
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        scrollToPosition(0);
-        if(adapter != null) adapter.notifyDataSetChanged();
+        load();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        scrollToPosition(0);
-        if(adapter != null) adapter.notifyDataSetChanged();
+        load();
     }
 
     public void scrollToPosition(final int position) {

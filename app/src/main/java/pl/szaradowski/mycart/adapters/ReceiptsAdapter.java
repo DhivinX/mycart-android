@@ -68,7 +68,7 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, final int pos) {
         Receipt item = data.get(pos);
 
-        int products_cnt = item.getProducts().size();
+        int products_cnt = item.getCnt();
         float price_all = item.getVal();
 
         holder.name.setText(item.getName());

@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import pl.szaradowski.mycart.R;
+import pl.szaradowski.mycart.common.Currency;
+import pl.szaradowski.mycart.common.DBManager;
 import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.RichButton;
 import pl.szaradowski.mycart.components.RichTextView;
@@ -43,6 +45,15 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        Utils.db = new DBManager(this);
+
+        Currency.addCurrency(new Currency("EUR", "Euro", "", " €"));
+        Currency.addCurrency(new Currency("USD", "Dolar amerykański", "$", ""));
+        Currency.addCurrency(new Currency("GBP", "Brytyjski funt szterling", "£", ""));
+        Currency.addCurrency(new Currency("PLN", "Polski złoty", "", " zł"));
+        Currency.addCurrency(new Currency("RUB", "Rubel rosyjski", "", " руб"));
+        Currency.addCurrency(new Currency("CNY", "Chiński yuan", "", " ¥"));
 
         tvPermText = findViewById(R.id.tvPermText);
         btnPerm = findViewById(R.id.btnPerm);

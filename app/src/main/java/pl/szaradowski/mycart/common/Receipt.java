@@ -8,68 +8,22 @@ package pl.szaradowski.mycart.common;
 
 import android.content.Context;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import pl.szaradowski.mycart.R;
 
 public class Receipt {
-    private int product_last_id;
-    private int id;
+    private long id;
     private String name;
-    private ArrayList<Product> products = new ArrayList<>();
     private long time;
+    private int cnt;
+    private float val;
 
-    public Receipt(){
+    public Receipt(){}
 
-    }
-
-    public Receipt(JsonObject j){
-        this.setId(j.get("id").getAsInt());
-        this.setProduct_last_id(j.get("product_last_id").getAsInt());
-        this.setName(j.get("name").getAsString());
-        this.setTime(j.get("time").getAsLong());
-
-        JsonArray epr = j.getAsJsonArray("products");
-
-        for(JsonElement pr : epr) {
-            JsonObject pitem = pr.getAsJsonObject();
-            Product p = new Product();
-
-            p.setId(pitem.get("id").getAsInt());
-            p.setReceiptId(pitem.get("receipt_id").getAsInt());
-            p.setName(pitem.get("name").getAsString());
-            p.setPrice(pitem.get("price").getAsFloat());
-            p.setCnt(pitem.get("cnt").getAsFloat());
-            if(pitem.get("img") != null) p.setImgPath(pitem.get("img").getAsString());
-            p.setTime(pitem.get("time").getAsLong());
-            p.setType(pitem.get("type").getAsInt());
-
-            this.getProducts().add(p);
-        }
-
-        Receipt.getList().add(this);
-    }
-
-    public int getProduct_last_id() {
-        return product_last_id;
-    }
-
-    public void setProduct_last_id(int product_last_id) {
-        this.product_last_id = product_last_id;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -89,6 +43,22 @@ public class Receipt {
         this.time = time;
     }
 
+    public int getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(int cnt) {
+        this.cnt = cnt;
+    }
+
+    public float getVal() {
+        return val;
+    }
+
+    public void setVal(float val) {
+        this.val = val;
+    }
+
     public String getTimeString(Context ctx){
         String tstr;
 
@@ -104,170 +74,5 @@ public class Receipt {
         }
 
         return tstr;
-    }
-
-    public ArrayList<Product> getProducts() {
-        return products;
-    }
-
-    public float getVal(){
-        float sum = 0;
-
-        for(Product p : getProducts()){
-            sum += p.getVal();
-        }
-
-        return sum;
-    }
-
-    public Product getProduct(int id){
-        for(Product item : products){
-            if(item.getId() == id)
-                return item;
-        }
-
-        return null;
-    }
-
-    public ArrayList<Product> addProduct(Product p){
-        product_last_id++;
-
-        p.setId(product_last_id);
-        p.setReceiptId(this.getId());
-        products.add(p);
-
-        return products;
-    }
-
-    public boolean removeProduct(Context ctx, Product p){
-        int index = 0;
-
-        for(Product item : products){
-            if(item.getId() == p.getId()) {
-                File f = new File(ctx.getFilesDir(), item.getImgPath());
-                f.delete();
-
-                products.remove(index);
-                return true;
-            }
-
-            index++;
-        }
-
-        return false;
-    }
-
-    public void clearProducts(Context ctx){
-        int index = 0;
-
-        for(Product item : products){
-            if(item.getImgPath() != null) {
-                File f = new File(ctx.getFilesDir(), item.getImgPath());
-                f.delete();
-            }
-        }
-
-        products.clear();
-    }
-
-    public JsonObject getJson(){
-        JsonObject j = new JsonObject();
-
-        j.addProperty("id", id);
-        j.addProperty("product_last_id", product_last_id);
-        j.addProperty("name", name);
-        j.addProperty("time", time);
-
-        JsonArray pr = new JsonArray();
-
-        for(Product p : products){
-            pr.add(p.getJson());
-        }
-
-        j.add("products", pr);
-
-        return j;
-    }
-
-
-    // STATIC
-    public static int last_id = 0;
-    private static ArrayList<Receipt> receipts = new ArrayList<>();
-
-    public static ArrayList<Receipt> getList(){
-        return receipts;
-    }
-
-    public static Receipt getById(int id){
-        for(Receipt item : receipts){
-            if(item.getId() == id)
-                return item;
-        }
-
-        return null;
-    }
-
-    public static Product getLastProductFrom(Product product){
-        for(Receipt r : receipts){
-            for(Product p : r.getProducts()){
-                if(product.getTime() > p.getTime() && product.getName().equalsIgnoreCase(p.getName()) && product.getReceipt_id() != p.getReceipt_id()){
-                    return p;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean removeById(Context ctx, int id){
-        int index = 0;
-
-        for(Receipt item : receipts){
-            if(item.getId() == id) {
-                item.clearProducts(ctx);
-                receipts.remove(index);
-                return true;
-            }
-
-            index++;
-        }
-
-        return false;
-    }
-
-    public static Receipt add(String name){
-        last_id++;
-
-        Receipt item = new Receipt();
-        item.setName(name);
-        item.setId(last_id);
-
-        receipts.add(item);
-
-        return item;
-    }
-
-    public static void sort(){
-        Collections.sort(receipts, new Comparator<Receipt>() {
-            @Override
-            public int compare(Receipt o1, Receipt o2) {
-                return o2.getTime() < o1.getTime() ? -1 : o1.getTime() > o2.getTime() ? 1 : 0;
-            }
-        });
-    }
-
-    public static JsonObject allToJson(){
-        JsonObject j = new JsonObject();
-        j.addProperty("last_id", last_id);
-
-        JsonArray rc = new JsonArray();
-
-        for(Receipt r : receipts){
-            rc.add(r.getJson());
-        }
-
-        j.add("receipts", rc);
-
-        return j;
     }
 }

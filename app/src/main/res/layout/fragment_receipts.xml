@@ -50,6 +50,7 @@
             android:layout_height="wrap_content" />
 
         <pl.szaradowski.mycart.components.RichTextView
+            android:id="@+id/tvSubtitle"
             android:text="@string/receipt_sub"
             android:textSize="18sp"
             android:layout_marginTop="-3dp"
