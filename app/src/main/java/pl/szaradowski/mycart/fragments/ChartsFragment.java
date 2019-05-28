@@ -157,10 +157,6 @@ public class ChartsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void refresh(){
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, -6);
-        long max_time = c.getTimeInMillis();
-
         float sum = 0;
         for(Receipt r : Utils.db.getReceiptsList(from.getTimeInMillis(), to.getTimeInMillis())) {
             sum += r.getVal();
@@ -173,18 +169,15 @@ public class ChartsFragment extends Fragment {
                         , HtmlCompat.FROM_HTML_MODE_LEGACY)
         );
 
-        //SQLiteDatabase db = Utils.db.getReadableDatabase();
+        SQLiteDatabase db = Utils.db.getReadableDatabase();
 
-
-        /*
         ArrayList<Entry> receiptEntries = new ArrayList<>();
         ArrayList<BarEntry> barEntries_6 = new ArrayList<>();
 
         ArrayList<String> barEntries_6_months = new ArrayList<>();
         Map<Integer, Float> map_days = new HashMap<>();
 
-        float sum = 0;
-
+        int in = 0;
         float sum_m0 = 0;
         float sum_m1 = 0;
         float sum_m2 = 0;
@@ -192,31 +185,38 @@ public class ChartsFragment extends Fragment {
         float sum_m4 = 0;
         float sum_m5 = 0;
 
-        for(Receipt r : Receipt.getList()){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -6);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        long from_time = cal.getTimeInMillis();
+        long to_time = System.currentTimeMillis();
+
+        for(Receipt r : Utils.db.getReceiptsList(from_time, to_time)){
             float price_all = r.getVal();
 
-            if(isInRange(r.getTime())){
-                sum += price_all;
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(r.getTime());
+            c.set(Calendar.HOUR, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
 
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(r.getTime());
-                c.set(Calendar.HOUR, 0);
-                c.set(Calendar.MINUTE, 0);
-                c.set(Calendar.SECOND, 0);
-                c.set(Calendar.MILLISECOND, 0);
+            int t = (int) (c.getTimeInMillis() / 1000);
 
-                int t = (int) (c.getTimeInMillis() / 1000);
+            try {
+                float v = map_days.get(t);
 
-                try {
-                    float v = map_days.get(t);
+                v += price_all;
 
-                    v += price_all;
-
-                    map_days.remove(t);
-                    map_days.put(t, v);
-                }catch (NullPointerException e){
-                    map_days.put(t, price_all);
-                }
+                map_days.remove(t);
+                map_days.put(t, v);
+            }catch (NullPointerException e){
+                map_days.put(t, price_all);
             }
 
             if(isTimePrevMonth(r.getTime(), 5, barEntries_6_months)) sum_m0 += price_all;
@@ -225,9 +225,11 @@ public class ChartsFragment extends Fragment {
             if(isTimePrevMonth(r.getTime(), 2, barEntries_6_months)) sum_m3 += price_all;
             if(isTimePrevMonth(r.getTime(), 1, barEntries_6_months)) sum_m4 += price_all;
             if(isTimePrevMonth(r.getTime(), 0, barEntries_6_months)) sum_m5 += price_all;
+
+            in++;
         }
 
-        if(Receipt.getList().size() > 0) {
+        if(in > 0) {
             barEntries_6.add(new BarEntry(0, sum_m0));
             barEntries_6.add(new BarEntry(1, sum_m1));
             barEntries_6.add(new BarEntry(2, sum_m2));
@@ -243,8 +245,6 @@ public class ChartsFragment extends Fragment {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
 
-                Log.e("d", pair.getKey()+" "+pair.getValue());
-
                 receiptEntries.add(new Entry((int) pair.getKey(), (float) pair.getValue()));
                 it.remove();
             }
@@ -252,20 +252,11 @@ public class ChartsFragment extends Fragment {
             drawChartReceipt(receiptEntries);
         }
 
-        tvSumTitle.setText(
-                HtmlCompat.fromHtml(
-                        getString(R.string.charts_title_sum, "<b>"+btnFrom.getText().toString()+"</b>", "<b>"+btnTo.getText().toString()+"</b>")
-                , HtmlCompat.FROM_HTML_MODE_LEGACY)
-        );
-
         tvReceiptTitle.setText(
                 HtmlCompat.fromHtml(
                         getString(R.string.charts_title_receipt, "<b>"+btnFrom.getText().toString()+"</b>", "<b>"+btnTo.getText().toString()+"</b>")
                         , HtmlCompat.FROM_HTML_MODE_LEGACY)
         );
-
-        tvSum.setText(Utils.currency.formatPrice(sum));
-        */
     }
 
     private void drawChart6(ArrayList<BarEntry> entries, final ArrayList<String> months){

@@ -7,6 +7,8 @@
 package pl.szaradowski.mycart.adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +52,7 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
     private ArrayList<Receipt> data;
     private Context ctx;
     private FingerListener listener;
+    private boolean clickable = true;
 
     public ReceiptsAdapter(ArrayList<Receipt> data, Context ctx) {
         this.data = data;
@@ -82,7 +85,17 @@ public class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHo
         holder.frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listener != null) listener.onClick(pos);
+                if(listener != null && clickable) {
+                    clickable = false;
+                    listener.onClick(pos);
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickable = true;
+                        }
+                    }, 1000);
+                }
             }
         });
 

@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,6 +49,8 @@ public class ReceiptsFragment extends Fragment {
     RichTextView title;
     RichTextView tvSubtitle;
 
+    LinearLayout emptyListInfo;
+
     ArrayList<Receipt> receipts = new ArrayList<>();
 
     @Override
@@ -59,13 +62,14 @@ public class ReceiptsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        date = Calendar.getInstance();
+        date = null;
 
         list = view.findViewById(R.id.list);
         add = view.findViewById(R.id.add);
         btnDate = view.findViewById(R.id.btnDate);
         title = view.findViewById(R.id.title);
         tvSubtitle = view.findViewById(R.id.tvSubtitle);
+        emptyListInfo = view.findViewById(R.id.emptyListInfo);
 
         list.setHasFixedSize(true);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,6 +84,8 @@ public class ReceiptsFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), ReceiptActivity.class);
                 intent.putExtra("id_receipt", item.getId());
                 Objects.requireNonNull(getActivity()).startActivity(intent);
+
+
             }
 
             @Override
@@ -100,20 +106,26 @@ public class ReceiptsFragment extends Fragment {
         btnDate.setOnClickListener(new IconButton.OnClickListener() {
             @Override
             public void onClick() {
+                Calendar c = Calendar.getInstance();
+                if(date != null) c = date;
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        date = Calendar.getInstance();
                         date.set(year, month, dayOfMonth, 0, 0, 0);
                         date.set(Calendar.MILLISECOND, 0);
 
                         load();
                     }
-                }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
                 datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == DialogInterface.BUTTON_NEGATIVE) {
-                            date = Calendar.getInstance();
+                            date = null;
+
+                            load();
                         }
                     }
                 });
@@ -139,7 +151,20 @@ public class ReceiptsFragment extends Fragment {
         tvSubtitle.setText(getString(R.string.receipt_sub, Utils.db.countAllReceipts()+""));
 
         receipts.clear();
-        receipts.addAll(Utils.db.getReceiptsList());
+        if(date == null) receipts.addAll(Utils.db.getReceiptsList());
+        else {
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(date.getTimeInMillis());
+            c.set(Calendar.HOUR, 23);
+            c.set(Calendar.MINUTE, 59);
+            c.set(Calendar.SECOND, 59);
+            c.set(Calendar.MILLISECOND, 999);
+
+            receipts.addAll(Utils.db.getReceiptsList(date.getTimeInMillis(), c.getTimeInMillis()));
+        }
+
+        if(receipts.size() > 0) emptyListInfo.setVisibility(View.GONE);
+        else emptyListInfo.setVisibility(View.VISIBLE);
         adapter.notifyDataSetChanged();
     }
 

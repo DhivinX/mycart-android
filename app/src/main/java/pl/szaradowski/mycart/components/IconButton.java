@@ -8,6 +8,7 @@
 package pl.szaradowski.mycart.components;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,6 +24,7 @@ public class IconButton extends AppCompatImageView {
 
     Context ctx;
     IconButton.OnClickListener onClickListener = null;
+    private boolean clickable = true;
 
     public IconButton(Context context) {
         super(context);
@@ -51,8 +53,16 @@ public class IconButton extends AppCompatImageView {
             public void onClick(View v) {
                 animShake();
 
-                if(onClickListener != null){
+                if(onClickListener != null && clickable){
+                    clickable = false;
                     onClickListener.onClick();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickable = true;
+                        }
+                    }, 1000);
                 }
             }
         });

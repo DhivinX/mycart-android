@@ -50,14 +50,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="100dp"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp" />
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="100dp"
+                    android:paddingRight="10dp"
+                    android:paddingLeft="10dp" />
+
+                <LinearLayout
+                    android:layout_marginTop="-80dp"
+                    android:id="@+id/emptyListInfo"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/circle_no_products"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"/>
+
+                    <pl.szaradowski.mycart.components.RichTextView
+                        android:gravity="center"
+                        android:text="@string/empty_product_title"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+                        app:textFont="Font-Regular"
+                        android:textColor="#424242"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <pl.szaradowski.mycart.components.RichTextView
+                        android:gravity="center"
+                        android:text="@string/empty_product_desc"
+                        android:textSize="18sp"
+                        app:textFont="Font-Light"
+                        android:textColor="#757575"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 

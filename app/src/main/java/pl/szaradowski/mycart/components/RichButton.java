@@ -9,6 +9,7 @@ package pl.szaradowski.mycart.components;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.View;
@@ -25,6 +26,7 @@ public class RichButton extends AppCompatButton {
     String font;
     Context ctx;
     RichButton.OnClickListener onClickListener = null;
+    private boolean clickable = true;
 
     public RichButton(Context context) {
         super(context);
@@ -48,8 +50,16 @@ public class RichButton extends AppCompatButton {
             public void onClick(View v) {
                 animScale();
 
-                if(onClickListener != null){
+                if(onClickListener != null && clickable){
+                    clickable = false;
                     onClickListener.onClick();
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickable = true;
+                        }
+                    }, 1000);
                 }
             }
         });

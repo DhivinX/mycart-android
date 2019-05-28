@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +39,8 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
     ProductsAdapter adapter;
     ArrayList<Product> products = new ArrayList<>();
 
+    LinearLayout emptyListInfo;
+
     RichTextView title, price, receipt_name, subname;
     IconButton menu, back, add;
     Receipt receipt;
@@ -55,6 +58,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         price = findViewById(R.id.price);
         receipt_name = findViewById(R.id.receipt_name);
         subname = findViewById(R.id.subname);
+        emptyListInfo = findViewById(R.id.emptyListInfo);
 
         list = findViewById(R.id.list);
 
@@ -139,6 +143,9 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
 
         subname.setText(getString(R.string.receipt_subname, receipt.getCnt(), Utils.currency.formatPrice(receipt.getVal())));
         price.setText(Utils.currency.formatPrice(receipt.getVal()));
+
+        if(products.size() > 0) emptyListInfo.setVisibility(View.GONE);
+        else emptyListInfo.setVisibility(View.VISIBLE);
     }
 
     public void showMenu(){

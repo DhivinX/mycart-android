@@ -87,4 +87,10 @@
     <string name="guide_add_receipt">Kliknij tutaj, aby dodać nowy paragon.</string>
     <string name="guide_list_receipt">Tutaj pojawią się Twoje paragony - listy z produktami.</string>
     <string name="receipt_change_date">Zmień datę</string>
+
+    <string name="empty_receipt_title">Trochę tu pusto!</string>
+    <string name="empty_receipt_desc">Rozpocznij zakupy i dodaj\n pierwszy paragon.</string>
+
+    <string name="empty_product_title">Brak produktów!</string>
+    <string name="empty_product_desc">Wypełnij swój paragon\n produktami.</string>
 </resources>

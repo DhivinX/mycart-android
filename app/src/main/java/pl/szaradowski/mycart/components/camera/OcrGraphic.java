@@ -24,6 +24,7 @@ import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Graphic instance for rendering TextBlock position, size, and ID within an associated graphic
@@ -33,8 +34,7 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
 
     private int mId;
 
-    private static final int TEXT_COLOR = Color.WHITE;
-
+    private String cText = "";
     private static Paint sRectPaint;
     private static Paint sTextPaint;
     private final TextBlock mText;
@@ -46,16 +46,17 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
 
         if (sRectPaint == null) {
             sRectPaint = new Paint();
-            sRectPaint.setColor(TEXT_COLOR);
+            sRectPaint.setColor(Color.CYAN);
             sRectPaint.setStyle(Paint.Style.STROKE);
             sRectPaint.setStrokeWidth(4.0f);
         }
 
         if (sTextPaint == null) {
             sTextPaint = new Paint();
-            sTextPaint.setColor(TEXT_COLOR);
-            sTextPaint.setTextSize(54.0f);
+            sTextPaint.setColor(Color.CYAN);
+            sTextPaint.setTextSize(34.0f);
         }
+
         // Redraw the overlay, as this graphic has been added.
         postInvalidate();
     }
@@ -113,9 +114,12 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
         // Break the text into multiple lines and draw each one according to its own bounding box.
         List<? extends Text> textComponents = text.getComponents();
         for(Text currentText : textComponents) {
+            cText = currentText.getValue();
+
             float left = translateX(currentText.getBoundingBox().left);
             float bottom = translateY(currentText.getBoundingBox().bottom);
-            canvas.drawText(currentText.getValue(), left, bottom, sTextPaint);
+
+            canvas.drawText(cText, left, bottom, sTextPaint);
         }
     }
 }
