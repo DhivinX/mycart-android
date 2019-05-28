@@ -9,7 +9,6 @@ package pl.szaradowski.mycart.activities;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,10 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.adapters.ProductsAdapter;
+import pl.szaradowski.mycart.common.DBManager;
 import pl.szaradowski.mycart.common.Product;
 import pl.szaradowski.mycart.common.Receipt;
 import pl.szaradowski.mycart.common.Utils;
@@ -35,11 +36,12 @@ import pl.szaradowski.mycart.components.RichTextView;
 public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     RecyclerView list;
     ProductsAdapter adapter;
+    ArrayList<Product> products = new ArrayList<>();
 
     RichTextView title, price, receipt_name, subname;
     IconButton menu, back, add;
     Receipt receipt;
-    int receipt_id = -1;
+    long id_receipt = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +59,26 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         list = findViewById(R.id.list);
 
         Intent intent = getIntent();
-        receipt_id = intent.getIntExtra("receipt_id", -1);
+        id_receipt = intent.getLongExtra("id_receipt", -1);
 
-        if(receipt_id == -1){
-            receipt = Receipt.add("");
+        if(id_receipt == -1){
+            receipt = new Receipt();
+
+            id_receipt = Utils.db.setReceipt(receipt, DBManager.ACTION_INSERT);
+
+            receipt.setId(id_receipt);
             receipt.setName(getString(R.string.receipt_def_name)+" "+receipt.getId());
             receipt.setTime(System.currentTimeMillis());
 
-            receipt_id = receipt.getId();
-
-            Receipt.sort();
-        }else{
-            receipt = Receipt.getById(receipt_id);
+            Utils.db.setReceipt(receipt, DBManager.ACTION_UPDATE);
         }
+
+        list.setHasFixedSize(true);
+        list.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new ProductsAdapter(products, this);
+        list.setAdapter(adapter);
+
+        load();
 
         title.setText(R.string.receipt_list);
 
@@ -85,28 +94,24 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 showMenu();
             }
         });
+
         add.setOnClickListener(new IconButton.OnClickListener() {
             @Override
             public void onClick() {
                 Intent intent = new Intent(ReceiptActivity.this, ProductActivity.class);
-                intent.putExtra("receipt_id", receipt.getId());
+                intent.putExtra("id_receipt", receipt.getId());
                 startActivity(intent);
             }
         });
 
-        list.setHasFixedSize(true);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ProductsAdapter(receipt.getProducts(), this);
-        list.setAdapter(adapter);
-
         adapter.setFingerListener(new ProductsAdapter.FingerListener() {
             @Override
             public void onClick(int position) {
-                Product item = receipt.getProducts().get(position);
+                Product item = products.get(position);
 
                 Intent intent = new Intent(ReceiptActivity.this, ProductActivity.class);
-                intent.putExtra("receipt_id", receipt.getId());
-                intent.putExtra("product_id", item.getId());
+                intent.putExtra("id_receipt", receipt.getId());
+                intent.putExtra("id_product", item.getId());
                 startActivity(intent);
             }
 
@@ -115,35 +120,25 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 return false;
             }
         });
-
-        refresh();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refresh();
+        load();
     }
 
-    public void refresh() {
-        if (receipt != null) {
-            adapter.notifyDataSetChanged();
+    public void load() {
+        receipt = Utils.db.getReceiptById(id_receipt);
 
-            int products_cnt = receipt.getProducts().size();
-            float price_all = receipt.getVal();
+        products.clear();
+        products.addAll(Utils.db.getProductsList(receipt.getId()));
+        adapter.notifyDataSetChanged();
 
-            receipt_name.setText(receipt.getName());
+        receipt_name.setText(receipt.getName());
 
-            subname.setText(getString(R.string.receipt_subname, products_cnt, Utils.currency.formatPrice(price_all)));
-            price.setText(Utils.currency.formatPrice(price_all));
-
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.saveAll(ReceiptActivity.this);
-                }
-            });
-        }
+        subname.setText(getString(R.string.receipt_subname, receipt.getCnt(), Utils.currency.formatPrice(receipt.getVal())));
+        price.setText(Utils.currency.formatPrice(receipt.getVal()));
     }
 
     public void showMenu(){
@@ -184,15 +179,8 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     receipt.setName(etName.getText().toString());
-
-                    refresh();
-
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utils.saveAll(ReceiptActivity.this);
-                        }
-                    });
+                    load();
+                    Utils.db.setReceipt(receipt, DBManager.ACTION_UPDATE);
 
                     dialog.dismiss();
                 }
@@ -202,15 +190,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         }
 
         if(action.equals("delete")){
-            Receipt.removeById(ReceiptActivity.this, receipt_id);
-
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    Utils.saveAll(ReceiptActivity.this);
-                }
-            });
-
+            Utils.db.setReceipt(receipt, DBManager.ACTION_DELETE);
             finish();
         }
 
@@ -224,14 +204,7 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                     date.set(year, month, dayOfMonth);
                     receipt.setTime(date.getTimeInMillis());
 
-                    Receipt.sort();
-
-                    new Handler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utils.saveAll(ReceiptActivity.this);
-                        }
-                    });
+                    Utils.db.setReceipt(receipt, DBManager.ACTION_UPDATE);
                 }
             }, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
 

@@ -6,20 +6,20 @@
 
 package pl.szaradowski.mycart.activities;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.text.HtmlCompat;
@@ -30,67 +30,70 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.dynamite.DynamiteModule;
-import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
-import java.util.List;
 
 import pl.szaradowski.mycart.R;
+import pl.szaradowski.mycart.common.DBManager;
 import pl.szaradowski.mycart.common.Product;
 import pl.szaradowski.mycart.common.Receipt;
 import pl.szaradowski.mycart.common.Utils;
 import pl.szaradowski.mycart.components.IconButton;
 import pl.szaradowski.mycart.components.RichEditText;
 import pl.szaradowski.mycart.components.RichTextView;
+import pl.szaradowski.mycart.components.camera.CameraSource;
+import pl.szaradowski.mycart.components.camera.CameraSourcePreview;
+import pl.szaradowski.mycart.components.camera.GraphicOverlay;
+import pl.szaradowski.mycart.components.camera.OcrGraphic;
 
 public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
     RichTextView title, previous_product_text;
     ImageView ivPicture;
     IconButton back, camera, menu, save, fav;
-    CameraSource mCameraSource;
-    SurfaceView mCameraView;
     RichEditText etName, etPrice, etCnt;
     CoordinatorLayout rootView;
     Bitmap picture = null;
     CardView previous_product;
+    AppBarLayout appbar;
 
-    int receipt_id = -1;
-    int product_id = -1;
+    long id_receipt = -1;
+    long id_product = -1;
     Receipt receipt = null;
     Product product = null;
 
     SparseArray<TextBlock> items_recognized;
+
+    pl.szaradowski.mycart.components.camera.CameraSource mCameraSource;
+    CameraSourcePreview mPreview;
+    GraphicOverlay<OcrGraphic> mGraphicOverlay;
+
+    private static final int RC_HANDLE_GMS = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        appbar = findViewById(R.id.appbar);
         title = findViewById(R.id.title);
         back = findViewById(R.id.back);
-        mCameraView = findViewById(R.id.mCameraView);
         camera = findViewById(R.id.camera);
         menu = findViewById(R.id.menu);
         save = findViewById(R.id.save);
@@ -103,27 +106,29 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         previous_product = findViewById(R.id.previous_product);
         previous_product_text = findViewById(R.id.previous_product_text);
 
-        Intent intent = getIntent();
-        receipt_id = intent.getIntExtra("receipt_id", -1);
-        product_id = intent.getIntExtra("product_id", -1);
+        mPreview = findViewById(R.id.mPreview);
+        mGraphicOverlay = findViewById(R.id.graphicOverlay);
 
-        if(receipt_id == -1) {
+        Intent intent = getIntent();
+        id_receipt = intent.getLongExtra("id_receipt", -1);
+        id_product = intent.getLongExtra("id_product", -1);
+
+        if(id_receipt == -1) {
             finish();
             return;
         }else {
-            receipt = Receipt.getById(receipt_id);
+            receipt = Utils.db.getReceiptById(id_receipt);
         }
 
-        if(product_id == -1){
+        if(id_product == -1){
             product = new Product();
-            product.setName("No name");
-            product.setReceiptId(receipt_id);
+            product.setIdReceipt(receipt.getId());
             product.setTime(System.currentTimeMillis());
 
             float cnt = 1;
             etCnt.setText(cnt+"");
         }else{
-            product = receipt.getProduct(product_id);
+            product = Utils.db.getProductById(id_product);
 
             etName.setText(product.getName());
             etPrice.setText(Utils.currency.format(product.getPrice()));
@@ -143,7 +148,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         }
 
         title.setText(getString(R.string.product_title));
-        startCameraSource();
+        createCameraSource();
 
         back.setOnClickListener(new IconButton.OnClickListener() {
             @Override
@@ -159,17 +164,18 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
             }
         });
 
-        mCameraView.post(new Runnable() {
+        mPreview.post(new Runnable() {
             @Override
             public void run() {
-                int width = mCameraView.getWidth();
-                int height = mCameraView.getHeight();
+                float dp = getResources().getDisplayMetrics().density;
+                int width = mPreview.getWidth();
+                int height = Math.round((float) mPreview.getHeight() * ((float) 2 / 3));
 
-                int marginTop = (height - width) / 2;
+                CoordinatorLayout.LayoutParams fp = new CoordinatorLayout.LayoutParams(width, height);
+                mPreview.setLayoutParams(fp);
 
-                CoordinatorLayout.LayoutParams fp = new CoordinatorLayout.LayoutParams(width, width);
-                fp.setMargins(0, marginTop, 0, 0);
-                mCameraView.setLayoutParams(fp);
+                fp = new CoordinatorLayout.LayoutParams(width, height - Math.round(70*dp));
+                appbar.setLayoutParams(fp);
             }
         });
 
@@ -188,7 +194,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                             Matrix matrix = new Matrix();
-                            if(bitmap.getWidth() > bitmap.getHeight()) matrix.postRotate(90);
+                            if(bitmap.getWidth() >= bitmap.getHeight()) matrix.postRotate(90);
 
                             bitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
                             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
@@ -234,15 +240,19 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 if(okName){
                     if(okPrice){
                         if(okCnt){
-                            if(product_id == -1) {
-                                receipt.addProduct(product);
-                            }
-
                             product.setName(name);
                             product.setPrice(price);
                             product.setCnt(cnt);
 
                             if(picture != null) product.setImg(ProductActivity.this, picture);
+
+                            if(id_product == -1) {
+                                long id = Utils.db.setProduct(product, DBManager.ACTION_INSERT);
+                                product.setId(id);
+                            }else{
+                                Utils.db.setProduct(product, DBManager.ACTION_UPDATE);
+                            }
+
                             finish();
                         }else Snackbar.make(rootView, R.string.error_okcnt, Snackbar.LENGTH_SHORT).show();
                     }else Snackbar.make(rootView, R.string.error_okprice, Snackbar.LENGTH_SHORT).show();
@@ -289,7 +299,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
     }
 
     private void findLastProduct(){
-        Product p = Receipt.getLastProductFrom(product);
+        Product p = Utils.db.findPreviousProductFromProduct(product);
 
         if(p != null){
             previous_product.setVisibility(View.VISIBLE);
@@ -364,84 +374,6 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         builder.show();
     }
 
-    private void startCameraSource(){
-        int status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
-
-        if(status == ConnectionResult.SUCCESS){
-            final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-
-            try{
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int width = displayMetrics.widthPixels;
-
-                mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
-                        .setFacing(CameraSource.CAMERA_FACING_BACK)
-                        .setRequestedPreviewSize(width, width)
-                        .setAutoFocusEnabled(true)
-                        .setRequestedFps(30.0f)
-                        .build();
-
-                mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
-                    @Override
-                    public void surfaceCreated(SurfaceHolder holder) {
-                        try {
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(ProductActivity.this, new String[]{Manifest.permission.CAMERA}, 33);
-                                return;
-                            }
-
-                            mCameraSource.start(mCameraView.getHolder());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                    }
-
-                    @Override
-                    public void surfaceDestroyed(SurfaceHolder holder) {
-                        mCameraSource.stop();
-                    }
-                });
-
-                textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
-                    @Override
-                    public void release() {
-                    }
-
-                    @Override
-                    public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                        items_recognized = detections.getDetectedItems();
-                    }
-                });
-            }catch (Exception e){
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startCameraSource();
-                    }
-                }, 5000);
-            }
-        }else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
-            builder.setTitle("Proszę zaaktualizować Usługi GooglePlay.");
-
-            builder.setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms")));
-                    dialog.dismiss();
-                    finish();
-                }
-            });
-
-            builder.show();
-        }
-    }
-
     public void showMenu(){
         PopupMenu popup = new PopupMenu(ProductActivity.this, menu);
         popup.setOnMenuItemClickListener(ProductActivity.this);
@@ -457,8 +389,8 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         String action = (String) menuItem.getTitleCondensed();
 
         if(action.equals("delete")){
-            if(product_id != -1){
-                receipt.removeProduct(ProductActivity.this, product);
+            if(id_product != -1){
+                Utils.db.setProduct(product, DBManager.ACTION_DELETE);
             }
 
             finish();
@@ -467,19 +399,122 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         return false;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(rootView.getWindowToken(),0);
-    }
-
     public RoundedBitmapDrawable cropBitmap(Bitmap bitmap) {
         RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
         roundedBitmapDrawable.setCircular(true);
         roundedBitmapDrawable.setAntiAlias(true);
 
         return roundedBitmapDrawable;
+    }
+
+    private void startCameraSource() throws SecurityException {
+        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext());
+
+        if (code != ConnectionResult.SUCCESS) {
+            Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+            dlg.show();
+        }
+
+        if (mCameraSource != null) {
+            try {
+                mPreview.start(mCameraSource, mGraphicOverlay);
+            } catch (IOException e) {
+                mCameraSource.release();
+                mCameraSource = null;
+            }
+        }
+    }
+
+    @SuppressLint("InlinedApi")
+    private void createCameraSource() {
+        Context context = getApplicationContext();
+
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
+        textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+            @Override
+            public void release() {
+                mGraphicOverlay.clear();
+            }
+
+            @Override
+            public void receiveDetections(Detector.Detections<TextBlock> detections) {
+                mGraphicOverlay.clear();
+                items_recognized = detections.getDetectedItems();
+
+                SparseArray<TextBlock> items = detections.getDetectedItems();
+                for (int i = 0; i < items.size(); ++i) {
+                    TextBlock item = items.valueAt(i);
+                    OcrGraphic graphic = new OcrGraphic(mGraphicOverlay, item);
+                    mGraphicOverlay.add(graphic);
+                }
+            }
+        });
+
+        if (!textRecognizer.isOperational()) {
+            IntentFilter lowstorageFilter = new IntentFilter(Intent.ACTION_DEVICE_STORAGE_LOW);
+            boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
+
+            if (hasLowStorage) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
+                builder.setMessage(R.string.vision_notext_storage);
+
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
+                builder.setMessage(R.string.vision_notext);
+
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }
+        }
+
+        mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setRequestedPreviewSize(1000, 1000)
+                .setRequestedFps(24.0f)
+                .setFlashMode(null)
+                //.setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
+                .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+                .build();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startCameraSource();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(),0);
+
+        if (mPreview != null) {
+            mPreview.stop();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mPreview != null) {
+            mPreview.release();
+        }
     }
 }

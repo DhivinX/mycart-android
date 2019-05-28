@@ -16,16 +16,23 @@
     android:focusableInTouchMode="true"
     tools:context=".activities.ProductActivity">
 
-    <SurfaceView
-        android:id="@+id/mCameraView"
+    <pl.szaradowski.mycart.components.camera.CameraSourcePreview
+        android:id="@+id/mPreview"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="match_parent" >
+
+        <pl.szaradowski.mycart.components.camera.GraphicOverlay
+            android:id="@+id/graphicOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </pl.szaradowski.mycart.components.camera.CameraSourcePreview>
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         app:elevation="0dp"
         android:layout_width="match_parent"
-        android:layout_height="230dp">
+        android:layout_height="330dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"

@@ -9,15 +9,15 @@ package pl.szaradowski.mycart.common;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 public class Product {
-    private int id = -1;
-    private int receipt_id = -1;
+    private long id = -1;
+    private long id_receipt = -1;
     private String name;
     private float price;
     private float cnt;
@@ -25,20 +25,20 @@ public class Product {
     private int type = 0;
     private long time;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public void setReceiptId(int id) {
-        this.receipt_id = id;
+    public void setIdReceipt(long id) {
+        this.id_receipt = id;
     }
 
-    public int getReceipt_id() {
-        return receipt_id;
+    public long getId_receipt() {
+        return id_receipt;
     }
 
     public String getName() {
@@ -101,30 +101,27 @@ public class Product {
         return bitmap;
     }
 
-    public JsonObject getJson(){
-        JsonObject j = new JsonObject();
-
-        j.addProperty("id", id);
-        j.addProperty("receipt_id", receipt_id);
-        j.addProperty("name", name);
-        j.addProperty("price", price);
-        j.addProperty("cnt", cnt);
-        j.addProperty("img", img);
-        j.addProperty("time", time);
-        j.addProperty("type", type);
-
-        return j;
-    }
-
     public void setImg(Context ctx, Bitmap img) {
         try {
-            this.img = "product_img_rc"+receipt_id+"_id"+id+"_t"+System.currentTimeMillis()+".jpg";
+            this.img = "product_img_rc" + id_receipt + "_t"+System.currentTimeMillis()+".jpg";
             File f = new File(ctx.getFilesDir(), this.img);
 
             FileOutputStream out = new FileOutputStream(f);
             img.compress(Bitmap.CompressFormat.JPEG, 60, out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void delImg(Context ctx) {
+        if(this.img == null) return;
+
+        try {
+            File f = new File(ctx.getFilesDir(), this.img);
+            f.delete();
+            this.img = null;
+        }catch (Exception e){
+            this.img = null;
         }
     }
 

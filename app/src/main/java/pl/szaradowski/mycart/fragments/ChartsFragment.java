@@ -8,6 +8,7 @@ package pl.szaradowski.mycart.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -139,13 +140,6 @@ public class ChartsFragment extends Fragment {
         return dayOfMonth + " " + getContext().getString(getContext().getResources().getIdentifier("month_sm_" + (month + 1), "string", getContext().getPackageName())) + " " + year;
     }
 
-    private boolean isInRange(long time){
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(time);
-
-        return (c.after(from) && c.before(to)) || c.equals(from) || c.equals(to);
-    }
-
     private boolean isTimePrevMonth(long time, int month, ArrayList<String> barEntries){
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(time);
@@ -163,6 +157,26 @@ public class ChartsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void refresh(){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -6);
+        long max_time = c.getTimeInMillis();
+
+        float sum = 0;
+        for(Receipt r : Utils.db.getReceiptsList(from.getTimeInMillis(), to.getTimeInMillis())) {
+            sum += r.getVal();
+        }
+
+        tvSum.setText(Utils.currency.formatPrice(sum));
+        tvSumTitle.setText(
+                HtmlCompat.fromHtml(
+                        getString(R.string.charts_title_sum, "<b>"+btnFrom.getText().toString()+"</b>", "<b>"+btnTo.getText().toString()+"</b>")
+                        , HtmlCompat.FROM_HTML_MODE_LEGACY)
+        );
+
+        //SQLiteDatabase db = Utils.db.getReadableDatabase();
+
+
+        /*
         ArrayList<Entry> receiptEntries = new ArrayList<>();
         ArrayList<BarEntry> barEntries_6 = new ArrayList<>();
 
@@ -251,6 +265,7 @@ public class ChartsFragment extends Fragment {
         );
 
         tvSum.setText(Utils.currency.formatPrice(sum));
+        */
     }
 
     private void drawChart6(ArrayList<BarEntry> entries, final ArrayList<String> months){

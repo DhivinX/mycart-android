@@ -5,6 +5,10 @@
     <string name="app_name_sub">Przemyślane zakupy!</string>
     <string name="permission_btn">Uprawnienia</string>
     <string name="permission_text">Ta aplikacja wymaga odpowiednich uprawnień,\n aby działać prawidłowo.</string>
+    <string name="vision_notext">Trwa pobieranie bibliotek Google Vision. Rozpoznawanie tekstu będzie chwilowo niedostępne.</string>
+    <string name="vision_notext_storage">Rozpoznawanie tekstu jest nie dostępne z powodu braku miejsca w pamięci urządzenia.</string>
+
+    <string name="ok">OK</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="save">Zapisz</string>
@@ -14,7 +18,7 @@
 
     <string name="btn_add_receipt">Nowy paragon</string>
     <string name="receipts">Paragony</string>
-    <string name="receipt_sub">Wszystkie zapisane paragony.</string>
+    <string name="receipt_sub">Masz %1$s zapisanych pozycji.</string>
     <string name="receipt_list">Lista produktów</string>
     <string name="receipt_def_name">Paragon #</string>
     <string name="receipt_subname">%1$d pozycji na kwotę %2$s</string>
