@@ -29,7 +29,7 @@ public class DBManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE table receipts(id INTEGER primary key autoincrement, name TEXT, time INTEGER)");
+        db.execSQL("CREATE table receipts(id INTEGER primary key autoincrement, name TEXT, img TEXT, time INTEGER)");
         db.execSQL("CREATE table products(id INTEGER primary key autoincrement, id_receipt INTEGER, name TEXT, img TEXT, type INTEGER, price REAL, cnt REAL, time INTEGER)");
     }
 
@@ -45,6 +45,7 @@ public class DBManager extends SQLiteOpenHelper {
 
         v.put("name", receipt.getName());
         v.put("time", receipt.getTime());
+        v.put("img", receipt.getImgPath());
 
         if(action == ACTION_INSERT){
             return db.insert("receipts", null, v);
@@ -69,7 +70,7 @@ public class DBManager extends SQLiteOpenHelper {
         Receipt receipt = null;
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor c = db.rawQuery("SELECT id, name, time, pr.cnt, pr.val FROM receipts LEFT JOIN (SELECT id_receipt, COUNT(*) AS cnt, SUM(price * cnt) AS val FROM products GROUP BY products.id_receipt) AS pr ON pr.id_receipt = receipts.id WHERE id = ?", new String[]{
+        Cursor c = db.rawQuery("SELECT id, name, img, time, pr.cnt, pr.val FROM receipts LEFT JOIN (SELECT id_receipt, COUNT(*) AS cnt, SUM(price * cnt) AS val FROM products GROUP BY products.id_receipt) AS pr ON pr.id_receipt = receipts.id WHERE id = ?", new String[]{
                 Long.toString(id)
         });
 
@@ -77,9 +78,10 @@ public class DBManager extends SQLiteOpenHelper {
             receipt = new Receipt();
             receipt.setId(c.getLong(0));
             receipt.setName(c.getString(1));
-            receipt.setTime(c.getLong(2));
-            receipt.setCnt(c.getInt(3));
-            receipt.setVal(c.getLong(4));
+            receipt.setImgPath(c.getString(2));
+            receipt.setTime(c.getLong(3));
+            receipt.setCnt(c.getInt(4));
+            receipt.setVal(c.getLong(5));
         }
 
         c.close();
@@ -96,15 +98,16 @@ public class DBManager extends SQLiteOpenHelper {
         ArrayList<Receipt> receipts = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor c = db.rawQuery("SELECT id, name, time, pr.cnt, pr.val FROM receipts LEFT JOIN (SELECT id_receipt, COUNT(*) AS cnt, SUM(price * cnt) AS val FROM products GROUP BY products.id_receipt) AS pr ON pr.id_receipt = receipts.id WHERE time BETWEEN "+time_from+" AND "+time_to+" ORDER BY time DESC", null);
+        Cursor c = db.rawQuery("SELECT id, name, img, time, pr.cnt, pr.val FROM receipts LEFT JOIN (SELECT id_receipt, COUNT(*) AS cnt, SUM(price * cnt) AS val FROM products GROUP BY products.id_receipt) AS pr ON pr.id_receipt = receipts.id WHERE time BETWEEN "+time_from+" AND "+time_to+" ORDER BY time DESC", null);
 
         while(c.moveToNext()){
             Receipt receipt = new Receipt();
             receipt.setId(c.getLong(0));
             receipt.setName(c.getString(1));
-            receipt.setTime(c.getLong(2));
-            receipt.setCnt(c.getInt(3));
-            receipt.setVal(c.getLong(4));
+            receipt.setImgPath(c.getString(2));
+            receipt.setTime(c.getLong(3));
+            receipt.setCnt(c.getInt(4));
+            receipt.setVal(c.getLong(5));
 
             receipts.add(receipt);
         }

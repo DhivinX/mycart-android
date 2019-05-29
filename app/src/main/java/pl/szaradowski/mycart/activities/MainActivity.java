@@ -126,6 +126,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         appbar.setExpanded(true,true);
-        Screen.onBack(this);
+
+        try{
+            Screen.onBack(this);
+        }catch (Exception e){
+            if(scrReceipts != null){
+                scrReceipts.Load();
+            }
+        }
     }
 }

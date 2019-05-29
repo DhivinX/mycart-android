@@ -67,6 +67,7 @@
         android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_marginTop="80dp"
             android:padding="20dp"
             android:orientation="vertical"

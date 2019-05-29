@@ -7,6 +7,13 @@
 package pl.szaradowski.mycart.common;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import pl.szaradowski.mycart.R;
 
@@ -16,6 +23,7 @@ public class Receipt {
     private long time;
     private int cnt;
     private float val;
+    private String img;
 
     public Receipt(){}
 
@@ -74,5 +82,56 @@ public class Receipt {
         }
 
         return tstr;
+    }
+
+    public Bitmap getImg(Context ctx) {
+        if(this.img == null) return null;
+
+        File f = new File(ctx.getFilesDir(), this.img);
+        Bitmap bitmap = null;
+
+        try {
+            bitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public void setImg(Context ctx, Bitmap img) {
+        try {
+            delImg(ctx);
+
+            this.img = "product_img_rc" + getId() + "_t"+System.currentTimeMillis()+"_receipt.jpg";
+
+            File f = new File(ctx.getFilesDir(), this.img);
+
+            FileOutputStream out = new FileOutputStream(f);
+            img.compress(Bitmap.CompressFormat.JPEG, 60, out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delImg(Context ctx) {
+        if(this.img == null) return;
+
+        try {
+            File f = new File(ctx.getFilesDir(), this.img);
+            f.delete();
+            this.img = null;
+        }catch (Exception e){
+            this.img = null;
+        }
+    }
+
+    public void setImgPath(String path) {
+        this.img = path;
+    }
+
+    public String getImgPath() {
+        return img;
     }
 }

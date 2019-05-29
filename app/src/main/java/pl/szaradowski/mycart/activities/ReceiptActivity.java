@@ -9,6 +9,12 @@ package pl.szaradowski.mycart.activities;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,11 +25,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import pl.szaradowski.mycart.BuildConfig;
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.adapters.ProductsAdapter;
 import pl.szaradowski.mycart.common.DBManager;
@@ -41,8 +50,9 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
 
     LinearLayout emptyListInfo;
 
+    ImageView photo;
     RichTextView title, price, receipt_name, subname;
-    IconButton menu, back, add;
+    IconButton menu, back, add, camera;
     Receipt receipt;
     long id_receipt = -1;
 
@@ -59,6 +69,8 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
         receipt_name = findViewById(R.id.receipt_name);
         subname = findViewById(R.id.subname);
         emptyListInfo = findViewById(R.id.emptyListInfo);
+        photo = findViewById(R.id.photo);
+        camera = findViewById(R.id.camera);
 
         list = findViewById(R.id.list);
 
@@ -108,6 +120,15 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
             }
         });
 
+        camera.setOnClickListener(new IconButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(ReceiptActivity.this, CameraActivity.class);
+                intent.putExtra("id_receipt", receipt.getId());
+                startActivity(intent);
+            }
+        });
+
         adapter.setFingerListener(new ProductsAdapter.FingerListener() {
             @Override
             public void onClick(int position) {
@@ -124,6 +145,25 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 return false;
             }
         });
+
+        photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = receipt.getImg(ReceiptActivity.this);
+
+                if(bitmap != null) {
+                    File file = Utils.saveBitmap("receipt-"+receipt.getId()+".jpg", bitmap);
+                    Uri photoURI = FileProvider.getUriForFile(ReceiptActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                    Intent intent = new Intent();
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(photoURI, "image/*");
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -134,6 +174,12 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
 
     public void load() {
         receipt = Utils.db.getReceiptById(id_receipt);
+
+        RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(getResources(), receipt.getImg(this));
+        roundedBitmapDrawable.setCircular(true);
+        roundedBitmapDrawable.setAntiAlias(true);
+
+        photo.setImageDrawable(roundedBitmapDrawable);
 
         products.clear();
         products.addAll(Utils.db.getProductsList(receipt.getId()));
@@ -186,9 +232,9 @@ public class ReceiptActivity extends AppCompatActivity implements PopupMenu.OnMe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     receipt.setName(etName.getText().toString());
-                    load();
                     Utils.db.setReceipt(receipt, DBManager.ACTION_UPDATE);
 
+                    load();
                     dialog.dismiss();
                 }
             });

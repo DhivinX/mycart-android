@@ -16,17 +16,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.text.HtmlCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,8 +52,10 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.File;
 import java.io.IOException;
 
+import pl.szaradowski.mycart.BuildConfig;
 import pl.szaradowski.mycart.R;
 import pl.szaradowski.mycart.common.DBManager;
 import pl.szaradowski.mycart.common.Product;
@@ -72,6 +78,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
     Bitmap picture = null;
     CardView previous_product;
     AppBarLayout appbar;
+    NestedScrollView scrollView;
 
     long id_receipt = -1;
     long id_product = -1;
@@ -105,6 +112,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         ivPicture = findViewById(R.id.ivPicture);
         previous_product = findViewById(R.id.previous_product);
         previous_product_text = findViewById(R.id.previous_product_text);
+        scrollView = findViewById(R.id.scrollView);
 
         mPreview = findViewById(R.id.mPreview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
@@ -133,6 +141,7 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
             etName.setText(product.getName());
             etPrice.setText(Utils.currency.format(product.getPrice()));
             etCnt.setText(product.getCnt()+"");
+            picture = product.getImg(this);
 
             if(product.getImg(this) != null){
                 ivPicture.setImageDrawable(cropBitmap(product.getImg(this)));
@@ -296,6 +305,23 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 return false;
             }
         });
+
+        ivPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(picture != null) {
+                    File file = Utils.saveBitmap("product-"+product.getId()+".jpg", picture);
+                    Uri photoURI = FileProvider.getUriForFile(ProductActivity.this, BuildConfig.APPLICATION_ID + ".provider", file);
+
+                    Intent intent = new Intent();
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setDataAndType(photoURI, "image/*");
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void findLastProduct(){
@@ -364,9 +390,16 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 ivPicture.setVisibility(View.VISIBLE);
 
                 if(etPrice.getText().length() == 0){
-                    etPrice.requestFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    appbar.setExpanded(false);
+
+                    etPrice.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            etPrice.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                        }
+                    });
                 }
             }
         });
@@ -512,6 +545,9 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(),0);
 
         if (mPreview != null) {
             mPreview.release();

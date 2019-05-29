@@ -103,6 +103,8 @@ public class Product {
 
     public void setImg(Context ctx, Bitmap img) {
         try {
+            delImg(ctx);
+
             this.img = "product_img_rc" + id_receipt + "_t"+System.currentTimeMillis()+".jpg";
             File f = new File(ctx.getFilesDir(), this.img);
 

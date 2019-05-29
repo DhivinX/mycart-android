@@ -26,29 +26,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <pl.szaradowski.mycart.components.RichTextView
-                android:id="@+id/receipt_name"
-                android:text="Receipt name"
-                android:textSize="34sp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                app:textFont="Font-Regular"
-                android:textColor="#000"
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="60dp">
 
-            <pl.szaradowski.mycart.components.RichTextView
-                android:text="Subname"
-                android:id="@+id/subname"
-                android:textSize="18sp"
-                android:layout_marginTop="-3dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginEnd="20dp"
-                app:textFont="Font-Light"
-                android:textColor="#A1A0A8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <pl.szaradowski.mycart.components.RichTextView
+                    android:id="@+id/receipt_name"
+                    android:text="Receipt name"
+                    android:textSize="28sp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:textFont="Font-Regular"
+                    android:textColor="#000"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <pl.szaradowski.mycart.components.RichTextView
+                    android:text="Subname"
+                    android:id="@+id/subname"
+                    android:textSize="16sp"
+                    android:layout_marginTop="-3dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginEnd="20dp"
+                    app:textFont="Font-Light"
+                    android:textColor="#A1A0A8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -101,6 +107,15 @@
         </LinearLayout>
     </LinearLayout>
 
+    <ImageView
+        android:layout_gravity="end"
+        android:id="@+id/photo"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/circle_no_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
     <pl.szaradowski.mycart.components.RichTextView
         android:id="@+id/price"
         android:text="0,00 zł"
@@ -116,6 +131,17 @@
         android:layout_gravity="start|bottom"
         android:layout_width="wrap_content"
         android:layout_height="60dp" />
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/camera"
+        android:layout_gravity="end|bottom"
+        android:padding="14dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="85dp"
+        android:src="@drawable/icon_camera"
+        android:background="@drawable/circle_button_dark"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <pl.szaradowski.mycart.components.IconButton
         android:id="@+id/add"

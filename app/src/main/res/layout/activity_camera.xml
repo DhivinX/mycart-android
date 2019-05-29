@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Dominik Szaradowski on 29.05.19 08:05
+  ~ Copyright (c) 2019 . All rights reserved.
+  ~ Website: https://www.szaradowski.pl
+  -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CameraActivity">
+
+    <pl.szaradowski.mycart.components.camera.CameraSourcePreview
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include layout="@layout/inc_top_bar_product" />
+
+    <pl.szaradowski.mycart.components.IconButton
+        android:id="@+id/takephoto"
+        android:layout_gravity="center|bottom"
+        android:padding="14dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/icon_camera"
+        android:background="@drawable/circle_button_red"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+</FrameLayout>
