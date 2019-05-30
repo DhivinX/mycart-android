@@ -17,6 +17,7 @@ public class Currency {
     private String prefix;
     private String suffix;
     private int zeropad = 2;
+    private int zeropad_cnt = 3;
 
     public Currency(String id, String name, String prefix, String suffix){
         this.id = id;
@@ -81,6 +82,12 @@ public class Currency {
 
     public String format(float price){
         String p = String.format(Locale.getDefault(), "%."+zeropad+"f", price);
+
+        return p;
+    }
+
+    public String formatCnt(float cnt){
+        String p = String.format(Locale.getDefault(), "%."+zeropad_cnt+"f", cnt);
 
         return p;
     }

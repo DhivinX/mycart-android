@@ -41,6 +41,7 @@
     <string name="previous_product">Produkt o tej nazwie kosztował wcześniej %1$s</string>
     <string name="remove_cancel_product">Usuń / Anuluj</string>
     <string name="receipt_photo_title">Zrób zdjęcie</string>
+    <string name="product_voice_question">Powiedz nazwę produktu.</string>
 
     <string name="settings">Ustawienia</string>
     <string name="settings_sub">Ustawienia konta i aplikacji.</string>

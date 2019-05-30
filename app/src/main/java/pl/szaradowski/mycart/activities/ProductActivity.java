@@ -18,6 +18,8 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -30,7 +32,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -54,6 +55,7 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import pl.szaradowski.mycart.BuildConfig;
 import pl.szaradowski.mycart.R;
@@ -70,9 +72,11 @@ import pl.szaradowski.mycart.components.camera.GraphicOverlay;
 import pl.szaradowski.mycart.components.camera.OcrGraphic;
 
 public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+    int REQUEST_SPEECH_RECOGNIZER = 3000;
+
     RichTextView title, previous_product_text;
     ImageView ivPicture;
-    IconButton back, camera, menu, save, fav;
+    IconButton back, camera, menu, save, fav, voice, minCnt, plsCnt;
     RichEditText etName, etPrice, etCnt;
     CoordinatorLayout rootView;
     Bitmap picture = null;
@@ -113,6 +117,12 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
         previous_product = findViewById(R.id.previous_product);
         previous_product_text = findViewById(R.id.previous_product_text);
         scrollView = findViewById(R.id.scrollView);
+        voice = findViewById(R.id.voice);
+        minCnt = findViewById(R.id.minCnt);
+        plsCnt = findViewById(R.id.plsCnt);
+
+        minCnt.setWaitTime(0);
+        plsCnt.setWaitTime(0);
 
         mPreview = findViewById(R.id.mPreview);
         mGraphicOverlay = findViewById(R.id.graphicOverlay);
@@ -134,13 +144,13 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
             product.setTime(System.currentTimeMillis());
 
             float cnt = 1;
-            etCnt.setText(cnt+"");
+            etCnt.setText(Utils.currency.formatCnt(cnt));
         }else{
             product = Utils.db.getProductById(id_product);
 
             etName.setText(product.getName());
             etPrice.setText(Utils.currency.format(product.getPrice()));
-            etCnt.setText(product.getCnt()+"");
+            etCnt.setText(Utils.currency.formatCnt(product.getCnt()));
             picture = product.getImg(this);
 
             if(product.getImg(this) != null){
@@ -237,7 +247,8 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 }
 
                 try{
-                    cnt = Float.parseFloat(etCnt.getText().toString());
+                    String c = etCnt.getText().toString().replace(",", ".");
+                    cnt = Float.parseFloat(c);
                 }catch (NumberFormatException e){
                     okCnt = false;
                 }
@@ -322,6 +333,47 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 }
             }
         });
+
+        voice.setOnClickListener(new IconButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.product_voice_question));
+                startActivityForResult(intent, REQUEST_SPEECH_RECOGNIZER);
+            }
+        });
+
+        minCnt.setOnClickListener(new IconButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                try {
+                    String c = etCnt.getText().toString().replace(",", ".");
+                    float cnt = Float.parseFloat(c);
+                    cnt -= 1.0f;
+                    if (cnt <= 0) cnt = 0.01f;
+                    etCnt.setText(Utils.currency.formatCnt(cnt));
+                }catch (Exception e){
+                    float cnt = 0.01f;
+                    etCnt.setText(Utils.currency.formatCnt(cnt));
+                }
+            }
+        });
+
+        plsCnt.setOnClickListener(new IconButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                try {
+                    String c = etCnt.getText().toString().replace(",", ".");
+                    float cnt = Float.parseFloat(c);
+                    cnt += 1.0f;
+                    etCnt.setText(Utils.currency.formatCnt(cnt));
+                }catch (Exception e){
+                    float cnt = 1f;
+                    etCnt.setText(Utils.currency.formatCnt(cnt));
+                }
+            }
+        });
     }
 
     private void findLastProduct(){
@@ -381,6 +433,8 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 String strName = arrayAdapter.getItem(which);
 
                 strName = strName.replaceAll("\n", " ");
+
+                strName = strName.toUpperCase();
 
                 etName.setText(strName);
 
@@ -522,6 +576,36 @@ public class ProductActivity extends AppCompatActivity implements PopupMenu.OnMe
                 //.setFlashMode(useFlash ? Camera.Parameters.FLASH_MODE_TORCH : null)
                 .setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
                 .build();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_SPEECH_RECOGNIZER) {
+            if (resultCode == RESULT_OK) {
+                assert data != null;
+                ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = results.get(0);
+
+                text = text.toUpperCase();
+
+                etName.setText(text);
+
+                if(etPrice.getText().length() == 0){
+                    appbar.setExpanded(false);
+
+                    etPrice.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            etPrice.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override

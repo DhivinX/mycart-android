@@ -81,7 +81,7 @@ public class DBManager extends SQLiteOpenHelper {
             receipt.setImgPath(c.getString(2));
             receipt.setTime(c.getLong(3));
             receipt.setCnt(c.getInt(4));
-            receipt.setVal(c.getLong(5));
+            receipt.setVal(c.getFloat(5));
         }
 
         c.close();
@@ -107,7 +107,7 @@ public class DBManager extends SQLiteOpenHelper {
             receipt.setImgPath(c.getString(2));
             receipt.setTime(c.getLong(3));
             receipt.setCnt(c.getInt(4));
-            receipt.setVal(c.getLong(5));
+            receipt.setVal(c.getFloat(5));
 
             receipts.add(receipt);
         }

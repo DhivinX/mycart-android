@@ -24,6 +24,8 @@ public class IconButton extends AppCompatImageView {
 
     Context ctx;
     IconButton.OnClickListener onClickListener = null;
+    private int waitTime = 1000;
+
     private boolean clickable = true;
 
     public IconButton(Context context) {
@@ -62,7 +64,7 @@ public class IconButton extends AppCompatImageView {
                         public void run() {
                             clickable = true;
                         }
-                    }, 1000);
+                    }, waitTime);
                 }
             }
         });
@@ -80,5 +82,9 @@ public class IconButton extends AppCompatImageView {
     public void animScale(){
         Animation a = AnimationUtils.loadAnimation(ctx, R.anim.scale_background);
         this.startAnimation(a);
+    }
+
+    public void setWaitTime(int time){
+        this.waitTime = time;
     }
 }

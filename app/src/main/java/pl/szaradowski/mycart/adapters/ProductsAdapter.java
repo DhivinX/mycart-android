@@ -77,7 +77,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
 
         holder.name.setText(item.getName());
         holder.price.setText(Utils.currency.formatPrice(item.getVal()));
-        holder.subname.setText(ctx.getString(R.string.item_product_subname, item.getCnt()+""));
+        holder.subname.setText(ctx.getString(R.string.item_product_subname, Utils.currency.formatCnt(item.getCnt())));
 
         RoundedBitmapDrawable roundedBitmapDrawable= RoundedBitmapDrawableFactory.create(ctx.getResources(), item.getImg(ctx));
         roundedBitmapDrawable.setCircular(true);
