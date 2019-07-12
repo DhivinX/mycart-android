@@ -72,7 +72,7 @@
     <string name="receipt_def_name">Receipt #</string>
     <string name="receipt_list">Products list</string>
     <string name="receipt_photo_title">Take a photo</string>
-    <string name="receipt_sub">You have %1$s save items.</string>
+    <string name="receipt_sub">You have %1$s items.</string>
     <string name="receipt_subname">"%1$d items for %2$s "</string>
     <string name="receipts">Receipts</string>
     <string name="remove_cancel_product">Remove / Cancel</string>
