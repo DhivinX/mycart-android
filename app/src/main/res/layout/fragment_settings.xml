@@ -59,7 +59,7 @@
                     <pl.szaradowski.mycart.components.RichTextView
                         android:textSize="16sp"
                         android:textColor="#000"
-                        android:text="Waluta"
+                        android:text="@string/currency"
                         app:textFont="Font-Light"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

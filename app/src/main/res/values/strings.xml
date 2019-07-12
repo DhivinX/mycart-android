@@ -48,6 +48,7 @@
     <string name="month_sm_10">OCT</string>
     <string name="month_sm_11">NOV</string>
     <string name="month_sm_12">DEC</string>
+    <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="no_chart_data">No data for the chart</string>
     <string name="ok">OK</string>
@@ -89,5 +90,11 @@
     <string name="update">Update</string>
     <string name="vision_notext">" Downloading Google Vision libraries. Text recognition will be temporarily unavailable."</string>
     <string name="vision_notext_storage">" Text recognition is not available, no space in the devices memory."</string>
-    <string name="yes">Yes</string>
+    <string name="EUR_name">Euro</string>
+    <string name="USD_name">U.S. Dollar</string>
+    <string name="GBP_name">British pound sterling</string>
+    <string name="PLN_name">Polish zloty</string>
+    <string name="RUB_name">Russian ruble</string>
+    <string name="CNY_name">Chinese yuan</string>
+    <string name="currency">Currency</string>
 </resources>

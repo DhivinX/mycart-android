@@ -95,4 +95,11 @@
 
     <string name="empty_product_title">Brak produktów!</string>
     <string name="empty_product_desc">Wypełnij swój paragon\n produktami.</string>
+    <string name="CNY_name">Chiński yuan</string>
+    <string name="EUR_name">Euro</string>
+    <string name="GBP_name">Brytyjski funt szterling</string>
+    <string name="PLN_name">Polski złoty</string>
+    <string name="RUB_name">Rubel rosyjski</string>
+    <string name="USD_name">Dolar amerykański</string>
+    <string name="currency">Waluta</string>
 </resources>

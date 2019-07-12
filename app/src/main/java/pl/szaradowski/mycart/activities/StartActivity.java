@@ -49,12 +49,12 @@ public class StartActivity extends AppCompatActivity {
 
         Utils.db = new DBManager(this);
 
-        Currency.addCurrency(new Currency("EUR", "Euro", "", " €"));
-        Currency.addCurrency(new Currency("USD", "Dolar amerykański", "$", ""));
-        Currency.addCurrency(new Currency("GBP", "Brytyjski funt szterling", "£", ""));
-        Currency.addCurrency(new Currency("PLN", "Polski złoty", "", " zł"));
-        Currency.addCurrency(new Currency("RUB", "Rubel rosyjski", "", " руб"));
-        Currency.addCurrency(new Currency("CNY", "Chiński yuan", "", " ¥"));
+        Currency.addCurrency(new Currency("EUR", getString(R.string.EUR_name), "", " €"));
+        Currency.addCurrency(new Currency("USD", getString(R.string.USD_name), "$", ""));
+        Currency.addCurrency(new Currency("GBP", getString(R.string.GBP_name), "£", ""));
+        Currency.addCurrency(new Currency("PLN", getString(R.string.PLN_name), "", " zł"));
+        Currency.addCurrency(new Currency("RUB", getString(R.string.RUB_name), "", " руб"));
+        Currency.addCurrency(new Currency("CNY", getString(R.string.CNY_name), "", " ¥"));
 
         tvPermText = findViewById(R.id.tvPermText);
         btnPerm = findViewById(R.id.btnPerm);
