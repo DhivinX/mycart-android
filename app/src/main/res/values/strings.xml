@@ -6,13 +6,13 @@
   -->
 
 <resources>
-    <string name="app_name">How much I pay</string>
+    <string name="app_name">"How much "</string>
     <string name="accept">Accept</string>
     <string name="btn_add_receipt">New receipt</string>
     <string name="cancel">Cancel</string>
     <string name="charts">Charts</string>
     <string name="charts_last_6">Last 6 months</string>
-    <string name="charts_sub">Old data and charts.</string>
+    <string name="charts_sub">History of data and charts.</string>
     <string name="charts_title_receipt">Charts from %1$s to %2$s</string>
     <string name="charts_title_sum">Sum from %1$s to %2$s</string>
     <string name="day_sm_2">Mon</string>
@@ -25,13 +25,13 @@
     <string name="app_name_sub">Thoughtful shopping!</string>
     <string name="def_currency">USD</string>
     <string name="empty_product_title">Empty product!</string>
-    <string name="empty_receipt_desc">Start shopping and add[...]</string>
+    <string name="empty_receipt_desc">Start shopping and add first receipt.</string>
     <string name="empty_receipt_title">Little empty here!</string>
-    <string name="empty_product_desc">Fill your receipt</string>
-    <string name="error_okcnt">An incorrect quantity or weight was given</string>
-    <string name="error_okname">An incorrect name was given</string>
-    <string name="error_okprice">An incorrect amount was given</string>
-    <string name="guide_add_receipt">Click here, to add new receipt.</string>
+    <string name="empty_product_desc">Add yours products to the receipt.</string>
+    <string name="error_okcnt">Quantity or weight is incorrect</string>
+    <string name="error_okname">Name is incorrect</string>
+    <string name="error_okprice">Amount is incorrect</string>
+    <string name="guide_add_receipt">Click here to add new receipt.</string>
     <string name="guide_list_receipt">Your receipts - product lists will appear here.</string>
     <string name="guide_next">NEXT</string>
     <string name="guide_understand">OK</string>
@@ -54,10 +54,10 @@
     <string name="permission_btn">Permissions</string>
     <string name="permission_text">This app requires the right permissions to work properly.</string>
     <string name="previous_product">A product with this name previously cost %1$s</string>
-    <string name="product_cnt">Quantity or weight in lb</string>
+    <string name="product_cnt">Quantity or weight in kg/lb</string>
     <string name="product_dialog_ocr_title">Choose product name</string>
     <string name="product_name">Product name</string>
-    <string name="product_price">Price for units (or weight)</string>
+    <string name="product_price">Price for unit (or weight)</string>
     <string name="product_title">Product card</string>
     <string name="product_type_0">"Other purchases "</string>
     <string name="product_type_1">Food</string>
@@ -69,7 +69,7 @@
     <string name="products_menu_item2">Delete</string>
     <string name="receipt_change_date">Change the date</string>
     <string name="receipt_changename_dialog_title">Rename</string>
-    <string name="receipt_def_name">Receipt#</string>
+    <string name="receipt_def_name">Receipt #</string>
     <string name="receipt_list">Products list</string>
     <string name="receipt_photo_title">Take a photo</string>
     <string name="receipt_sub">You have %1$s save items.</string>
@@ -83,11 +83,11 @@
     <string name="settings_sub">Account and application settings.</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
-    <string name="type_product_cnt">Enter the quantity or weight</string>
-    <string name="type_product_name">Enter the product name</string>
-    <string name="type_product_price">Enter price</string>
+    <string name="type_product_cnt">Type the quantity or weight</string>
+    <string name="type_product_name">Type the product name</string>
+    <string name="type_product_price">Type price</string>
     <string name="update">Update</string>
     <string name="vision_notext">" Downloading Google Vision libraries. Text recognition will be temporarily unavailable."</string>
-    <string name="vision_notext_storage">" Text recognition is not available, no space in the device's memory."</string>
+    <string name="vision_notext_storage">" Text recognition is not available, no space in the devices memory."</string>
     <string name="yes">Yes</string>
 </resources>

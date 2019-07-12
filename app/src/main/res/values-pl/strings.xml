@@ -30,7 +30,7 @@
     <string name="type_product_name">Wprowadź nazwę produktu</string>
     <string name="product_price">Cena za jednostkę (lub za kg)</string>
     <string name="type_product_price">Wprowadź kwotę</string>
-    <string name="product_cnt">Ilość lub waga w kg</string>
+    <string name="product_cnt">Ilość lub waga w kg/lb</string>
     <string name="type_product_cnt">Wprowadź ilość lub wagę</string>
     <string name="error_okcnt">Podano niepoprawną ilość lub wagę</string>
     <string name="error_okprice">Podano niepoprawną kwotę</string>
