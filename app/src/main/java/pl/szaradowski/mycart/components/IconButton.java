@@ -9,11 +9,12 @@ package pl.szaradowski.mycart.components;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import pl.szaradowski.mycart.R;
 

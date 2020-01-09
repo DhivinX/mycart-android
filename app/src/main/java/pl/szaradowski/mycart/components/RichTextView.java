@@ -9,7 +9,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.support.v7.widget.AppCompatTextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import pl.szaradowski.mycart.R;
 

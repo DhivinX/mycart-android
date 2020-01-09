@@ -1,20 +1,15 @@
 package pl.szaradowski.mycart.activities;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
